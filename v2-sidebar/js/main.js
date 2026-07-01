@@ -28,7 +28,7 @@
   }
 
   /* ---------- NAV ---------- */
-  var navItems = [{ slug: "home", label: "Accueil" }]
+  var navItems = [{ slug: "home", label: "Accueil" }, { slug: "atelier", label: "Atelier" }]
     .concat(S.categories.map(function (c) { return { slug: c.slug, label: c.label }; }))
     .concat([{ slug: "avis", label: "Avis" }, { slug: "contact", label: "Contact" }]);
   document.getElementById("site-nav").innerHTML = navItems.map(function (n) {
@@ -50,6 +50,19 @@
       '<p class="hero__baseline">' + i.baseline + '</p>' +
       '<ul class="hero__services">' + i.services.map(function (s) { return '<li>' + s.t + '</li>'; }).join("") + '</ul>' +
       '<div class="hero__cta"><a class="btn btn--gold" href="#contact">Prendre rendez-vous</a><a class="btn btn--on-dark" href="tel:' + i.phoneIntl + '">Appeler</a></div>' +
+    '</div>';
+
+  /* ---------- ATELIER (savoir-faire, split photo + texte, no-scroll) ---------- */
+  var at = i.atelier;
+  document.getElementById("view-atelier").innerHTML =
+    '<div class="atelier-split">' +
+      '<figure class="atelier-media"><img src="' + at.img + '" alt="Philippe Colin à l\'atelier — création de bijoux à la main" loading="lazy" width="1200" height="800"></figure>' +
+      '<div class="atelier-body">' +
+        '<p class="eyebrow">' + at.kicker + '</p>' +
+        '<h2 class="atelier-title">' + at.title + '</h2>' +
+        '<p class="atelier-lead">' + at.body + '</p>' +
+        '<ul class="atelier-points">' + at.points.map(function (p) { return '<li>' + p + '</li>'; }).join("") + '</ul>' +
+      '</div>' +
     '</div>';
 
   /* ---------- CATÉGORIES (5 produits/vue, no-scroll) ---------- */

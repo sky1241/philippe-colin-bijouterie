@@ -131,7 +131,7 @@ h1, h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-hei
 .brand__name { font-family: var(--font-display); font-weight: var(--fw-bold); font-size: 1.35rem; letter-spacing: .01em; }
 .brand__sub { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--color-gold-strong); margin-top: 4px; }
 
-.site-nav { display: flex; align-items: center; gap: clamp(.5rem, 1.4vw, 1.4rem); }
+.site-nav { display: flex; align-items: center; gap: clamp(.4rem, 1.1vw, 1.1rem); }
 .nav-link {
   font-size: var(--fs-small); font-weight: var(--fw-medium); color: var(--color-ink);
   padding: var(--space-2) var(--space-1); position: relative; letter-spacing: .01em;
@@ -265,8 +265,35 @@ h1, h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-hei
 .contact-map { border-radius: var(--radius-md); overflow: hidden; border: 1px solid var(--color-border-subtle); min-height: 0; }
 .contact-map iframe { width: 100%; height: 100%; border: 0; display: block; }
 
+/* ------------------------------ VUE ATELIER (savoir-faire · split) ------------------------------ */
+.atelier-grid { flex: 1 1 auto; min-height: 0; display: flex; align-items: center; gap: clamp(1.25rem, 3.5vw, 3rem); }
+.atelier-media {
+  flex: 0 0 44%; align-self: stretch; min-height: 0; overflow: hidden;
+  border-radius: var(--radius-md); background: var(--color-surface-2); box-shadow: var(--shadow-sm);
+}
+.atelier-media img { width: 100%; height: 100%; object-fit: cover; }
+.atelier-body { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: clamp(.75rem, 2.2vh, 1.3rem); }
+/* view-head réutilisé mais aligné à gauche dans la mise en page split */
+.atelier-body .view-head { text-align: left; margin-bottom: 0; }
+.atelier-body .view-head .rule { margin: var(--space-3) 0 0; }
+.atelier-lead { color: var(--color-ink-soft); font-size: var(--fs-body); line-height: var(--lh-copy); max-width: 58ch; }
+.atelier-points {
+  list-style: none; padding: 0; margin: 0;
+  display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2) var(--space-6); max-width: 56ch;
+}
+.atelier-points li { display: flex; align-items: center; gap: var(--space-2); font-size: var(--fs-small); font-weight: var(--fw-medium); color: var(--color-ink); }
+.atelier-points li::before { content: "◆"; color: var(--color-gold); font-size: .6em; flex: 0 0 auto; }
+.atelier-cta { margin-top: var(--space-1); }
+/* entrée animée cohérente avec le reste du site */
+.atelier-media, .atelier-lead, .atelier-points, .atelier-cta { opacity: 0; transform: translateY(28px) scale(.985); transition: opacity .6s var(--ease-out), transform .6s var(--ease-out); }
+.view.is-active .atelier-media  { opacity: 1; transform: none; transition-delay: .10s; }
+.view.is-active .atelier-lead   { opacity: 1; transform: none; transition-delay: .20s; }
+.view.is-active .atelier-points { opacity: 1; transform: none; transition-delay: .30s; }
+.view.is-active .atelier-cta    { opacity: 1; transform: none; transition-delay: .40s; }
+
 /* ------------------------------ RESPONSIVE ------------------------------ */
-@media (max-width: 900px) {
+/* 9 items sur la barre haute → hamburger relevé à 1040px pour éviter le débordement */
+@media (max-width: 1040px) {
   .site-nav {
     position: fixed; inset: 0 0 0 auto; width: min(78vw, 320px); z-index: var(--z-drawer);
     flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 0;
@@ -302,6 +329,16 @@ h1, h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-hei
   /* Contact : 1 colonne, carte cachée (bouton Maps à la place) */
   .contact-grid { grid-template-columns: 1fr; }
   .contact-map { display: none; }
+  /* Atelier : empilé — photo compacte au-dessus, texte dessous (no-scroll) */
+  .atelier-grid { flex-direction: column; align-items: stretch; justify-content: center; gap: clamp(.75rem, 2vh, 1.25rem); }
+  .atelier-media { flex: 0 0 auto; align-self: stretch; height: clamp(120px, 20vh, 190px); }
+  .atelier-body { flex: 0 0 auto; justify-content: flex-start; gap: var(--space-3); }
+  .atelier-lead { font-size: var(--fs-small); max-width: none; }
+  .atelier-points { gap: var(--space-1) var(--space-4); max-width: none; }
+}
+/* écran très court : on masque la photo pour garantir le zéro-scroll (texte prioritaire) */
+@media (max-width: 767px) and (max-height: 620px) {
+  .atelier-media { display: none; }
 }
 
 @media (max-width: 420px) {

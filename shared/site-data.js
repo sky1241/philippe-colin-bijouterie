@@ -22,6 +22,13 @@ window.SITE = {
       ["Dimanche", "Fermé"]
     ],
     hoursNote: "Horaires à confirmer avec la boutique.",
+    atelier: {
+      kicker: "Le savoir-faire",
+      title: "Créateur, depuis 1990",
+      body: "Philippe Colin exerce la bijouterie-horlogerie à Chêne-Bourg, aux portes de Genève, depuis 1990. Son activité — déclarée « fabrication et vente » — dit l'essentiel : ici, les bijoux sont créés à la main dans l'atelier, pièces uniques et sur-mesure. Et parce qu'une montre fait partie du quotidien, on s'occupe aussi du reste.",
+      points: ["Création & sur-mesure", "Changement de pile", "Bracelets de montre", "Réparation & entretien", "Transformation de bijoux", "Expertise & estimation"],
+      img: "https://images.pexels.com/photos/7167002/pexels-photo-7167002.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop"
+    },
     mapsQuery: "Colin Philippe Rue de Genève 71 1225 Chêne-Bourg",
     services: [
       { t: "Création à la main", d: "Pièces uniques façonnées dans l'atelier, sur-mesure." },

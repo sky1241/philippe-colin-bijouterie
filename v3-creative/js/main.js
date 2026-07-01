@@ -17,7 +17,7 @@
   }
 
   /* nav items (avec numéro pour les catégories) */
-  var navItems = [{ slug: "home", label: "Accueil", num: "" }]
+  var navItems = [{ slug: "home", label: "Accueil", num: "" }, { slug: "atelier", label: "Atelier", num: "" }]
     .concat(S.categories.map(function (c, ci) { return { slug: c.slug, label: c.label, num: pad2(ci + 1) }; }))
     .concat([{ slug: "avis", label: "Avis", num: "" }, { slug: "contact", label: "Contact", num: "" }]);
 
@@ -58,6 +58,19 @@
       '</div>' +
     '</section>';
   }).join("");
+
+  /* ---- atelier (savoir-faire : split photo + texte éditorial) ---- */
+  var at = i.atelier;
+  document.getElementById("view-atelier").innerHTML =
+    '<div class="atelier-grid">' +
+      '<figure class="atelier-media"><img src="' + at.img + '" alt="Philippe Colin, bijoutier-créateur, dans son atelier" loading="lazy" width="1200" height="800"></figure>' +
+      '<div class="atelier-body">' +
+        '<p class="atelier-kicker"><span class="n serif">&#10022;</span>' + at.kicker + '</p>' +
+        '<h2 class="atelier-title">' + at.title + '</h2>' +
+        '<p class="atelier-text">' + at.body + '</p>' +
+        '<ul class="atelier-points">' + at.points.map(function (p) { return '<li>' + p + '</li>'; }).join("") + '</ul>' +
+      '</div>' +
+    '</div>';
 
   /* ---- avis (carousel : rotation, récents en tête) ---- */
   var r = S.reviews;

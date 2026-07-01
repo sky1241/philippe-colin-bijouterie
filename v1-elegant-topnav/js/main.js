@@ -28,7 +28,7 @@
   }
 
   /* ---------- NAV ---------- */
-  var navItems = [{ slug: "home", label: "Accueil" }]
+  var navItems = [{ slug: "home", label: "Accueil" }, { slug: "atelier", label: "Atelier" }]
     .concat(S.categories.map(function (c) { return { slug: c.slug, label: c.label }; }))
     .concat([{ slug: "avis", label: "Avis" }, { slug: "contact", label: "Contact" }]);
   document.getElementById("site-nav").innerHTML = navItems.map(function (n) {
@@ -62,6 +62,19 @@
       '<div class="product-row">' + cards + '</div>' +
     '</section>';
   }).join("");
+
+  /* ---------- ATELIER (savoir-faire, split photo + texte, no-scroll) ---------- */
+  var at = i.atelier;
+  document.getElementById("view-atelier").innerHTML =
+    '<div class="atelier-grid">' +
+      '<div class="atelier-media"><img src="' + at.img + '" alt="Atelier de bijouterie — Philippe Colin, créateur depuis ' + i.since + '" loading="lazy"></div>' +
+      '<div class="atelier-body">' +
+        '<div class="view-head"><p class="eyebrow">' + at.kicker + '</p><h2>' + at.title + '</h2><div class="rule"></div></div>' +
+        '<p class="atelier-lead">' + at.body + '</p>' +
+        '<ul class="atelier-points">' + at.points.map(function (p) { return '<li>' + p + '</li>'; }).join("") + '</ul>' +
+        '<div class="atelier-cta"><a class="btn btn--gold" href="#contact">Prendre rendez-vous</a></div>' +
+      '</div>' +
+    '</div>';
 
   /* ---------- AVIS (exemples, honnêtement signalés) ---------- */
   var r = S.reviews;
