@@ -96,7 +96,7 @@ h1,h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-heig
 
 /* ---------- menu plein écran ---------- */
 .overlay {
-  position: fixed; inset: 0; z-index: var(--z-overlay); background: rgba(15,12,8,.97);
+  position: fixed; inset: 0; z-index: var(--z-overlay); background: #14100A;
   opacity: 0; visibility: hidden; transition: opacity var(--dur-enter) var(--ease-out), visibility var(--dur-enter);
   display: flex; flex-direction: column; padding: clamp(1.5rem, 5vh, 3rem) clamp(1.5rem, 6vw, 5rem);
 }

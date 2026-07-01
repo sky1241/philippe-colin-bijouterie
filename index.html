@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Colin Philippe — 3 propositions de site vitrine</title>
+  <meta name="description" content="Trois maquettes de site vitrine pour Colin Philippe, bijouterie-horlogerie à Chêne-Bourg (Genève).">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Raleway:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{ --bg:#FAF6EE; --ink:#1C1813; --soft:#5A5144; --gold:#A9863F; --goldk:#775B24; --card:#fff; --line:#E7DECC; }
+    *{box-sizing:border-box} html,body{margin:0}
+    body{ font-family:"Raleway",system-ui,sans-serif; color:var(--ink); background:var(--bg); line-height:1.5;
+      min-height:100vh; display:flex; flex-direction:column; padding:clamp(1.5rem,4vw,3rem); }
+    a{color:var(--goldk);text-decoration:none}
+    header{text-align:center; margin-bottom:clamp(1.5rem,4vh,2.5rem)}
+    .kick{font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--goldk);font-weight:600}
+    h1{font-family:"Playfair Display",serif; font-weight:700; font-size:clamp(2rem,1.4rem+2.4vw,3.25rem); margin:.4rem 0 .2rem}
+    .sub{color:var(--soft); font-size:clamp(1rem,.95rem+.3vw,1.15rem)}
+    .grid{ flex:1; display:grid; gap:clamp(1rem,2vw,1.75rem); grid-template-columns:repeat(3,1fr); align-content:center; max-width:1200px; margin:0 auto; width:100% }
+    .card{ background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden; display:flex; flex-direction:column;
+      transition:box-shadow .18s ease, transform .18s ease }
+    .card:hover{ box-shadow:0 16px 40px rgba(28,24,19,.14); transform:translateY(-4px) }
+    .card__img{ display:block; aspect-ratio:16/10; overflow:hidden; background:var(--line); border-bottom:1px solid var(--line) }
+    .card__img img{ width:100%; height:100%; object-fit:cover; display:block }
+    .card__body{ padding:1.25rem 1.35rem 1.4rem; display:flex; flex-direction:column; flex:1 }
+    .tag{ font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--goldk);font-weight:600 }
+    .card h2{ font-family:"Playfair Display",serif; font-weight:600; font-size:1.3rem; margin:.35rem 0 .4rem }
+    .card p{ color:var(--soft); font-size:.92rem; margin:0 0 1.1rem; flex:1 }
+    .btn{ align-self:flex-start; background:var(--gold); color:#1C1813; font-weight:600; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase;
+      padding:.7rem 1.2rem; border-radius:8px; transition:background .15s ease }
+    .btn:hover{ background:#8f7134; color:#fff }
+    footer{ text-align:center; margin-top:clamp(1.25rem,3vh,2rem); color:var(--soft); font-size:.8rem }
+    footer b{color:var(--ink)}
+    @media(max-width:820px){ .grid{grid-template-columns:1fr; max-width:460px} .card__img{aspect-ratio:16/9} }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="kick">Colin Philippe · Bijouterie–Horlogerie · Chêne-Bourg</p>
+    <h1>Trois propositions</h1>
+    <p class="sub">Trois directions pour le site vitrine. Ouvrez-les, comparez, choisissez.</p>
+  </header>
+
+  <main class="grid">
+    <article class="card">
+      <a class="card__img" href="v1-elegant-topnav/index.html"><img src="previews/v1.png" alt="Aperçu de la version 1"></a>
+      <div class="card__body">
+        <span class="tag">Version 1</span>
+        <h2>Élégante · barre haute</h2>
+        <p>Sobre et lumineuse. Navigation en barre horizontale, hero plein écran. La valeur sûre.</p>
+        <a class="btn" href="v1-elegant-topnav/index.html">Ouvrir V1 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <a class="card__img" href="v2-sidebar/index.html"><img src="previews/v2.png" alt="Aperçu de la version 2"></a>
+      <div class="card__body">
+        <span class="tag">Version 2</span>
+        <h2>Rail latéral gauche</h2>
+        <p>Même sobriété, navigation verticale à gauche (téléphone + rendez-vous toujours visibles).</p>
+        <a class="btn" href="v2-sidebar/index.html">Ouvrir V2 →</a>
+      </div>
+    </article>
+    <article class="card">
+      <a class="card__img" href="v3-creative/index.html"><img src="previews/v3.png" alt="Aperçu de la version 3"></a>
+      <div class="card__body">
+        <span class="tag">Version 3</span>
+        <h2>Luxe sombre · éditorial</h2>
+        <p>Audacieuse. Fond charbon &amp; or, menu plein écran, mise en page asymétrique.</p>
+        <a class="btn" href="v3-creative/index.html">Ouvrir V3 →</a>
+      </div>
+    </article>
+  </main>
+
+  <footer>
+    Maquettes — photos et avis <b>d'exemple</b> à remplacer par les vrais. · <b>Colin Philippe</b>, Rue de Genève 71, 1225 Chêne-Bourg (GE) · 022 348 75 80
+  </footer>
+</body>
+</html>
