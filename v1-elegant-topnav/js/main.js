@@ -53,13 +53,13 @@
       return '<article class="product-card">' +
         '<div class="product-card__media"><img src="' + p.img + '" alt="' + p.name + ' — ' + p.spec + '" loading="lazy" width="800" height="1000"></div>' +
         '<div class="product-card__body">' +
-          '<h3 class="product-card__name">' + p.name + '</h3>' +
+          '<h2 class="product-card__name">' + p.name + '</h2>' +
           '<p class="product-card__spec">' + p.spec + '</p>' +
           '<p class="product-card__price">' + p.price + '</p>' +
         '</div></article>';
     }).join("");
     return '<section class="view view--pad view--category" id="view-' + c.slug + '" aria-label="' + c.title + '">' +
-      '<div class="view-head"><p class="eyebrow">Collection</p><h2>' + c.title + '</h2><p class="intro">' + c.intro + '</p><div class="rule"></div></div>' +
+      '<div class="view-head"><p class="eyebrow">Collection</p><h1>' + c.title + '</h1><p class="intro">' + c.intro + '</p><div class="rule"></div></div>' +
       '<div class="product-row">' + cards + '</div>' +
     '</section>';
   }).join("");
@@ -70,7 +70,7 @@
     '<div class="atelier-grid">' +
       '<div class="atelier-media"><img src="' + at.img + '" alt="Atelier de bijouterie — Philippe Colin, créateur depuis ' + i.since + '" loading="lazy"></div>' +
       '<div class="atelier-body">' +
-        '<div class="view-head"><p class="eyebrow">' + at.kicker + '</p><h2>' + at.title + '</h2><div class="rule"></div></div>' +
+        '<div class="view-head"><p class="eyebrow">' + at.kicker + '</p><h1>' + at.title + '</h1><div class="rule"></div></div>' +
         '<p class="atelier-lead">' + at.body + '</p>' +
         '<ul class="atelier-points">' + at.points.map(function (p) { return '<li>' + p + '</li>'; }).join("") + '</ul>' +
         '<div class="atelier-cta"><a class="btn btn--gold" href="#contact">Prendre rendez-vous</a></div>' +
@@ -88,13 +88,15 @@
     '</article>';
   }
   document.getElementById("view-avis").innerHTML =
-    '<div class="view-head"><p class="eyebrow">Avis Google</p><h2>Ils nous font confiance</h2><div class="rule"></div></div>' +
+    '<div class="view-head"><p class="eyebrow">Avis Google</p><h1>Ils nous font confiance</h1><div class="rule"></div></div>' +
     '<div class="avis-wrap">' +
-      '<div class="avis-agg">' +
-        '<div class="avis-agg__score">' + r.rating + '</div>' +
-        '<div class="avis-agg__stars" role="img" aria-label="Note ' + r.rating + ' sur 5">★★★★★</div>' +
-        '<div class="avis-agg__meta">Note moyenne Google · basé sur ' + r.count + ' avis</div>' +
-      '</div>' +
+      '<a class="avis-agg__link" href="' + r.googleUrl + '" target="_blank" rel="noopener" aria-label="Voir les ' + r.count + ' avis Google">' +
+        '<div class="avis-agg">' +
+          '<div class="avis-agg__score">' + r.rating + '</div>' +
+          '<div class="avis-agg__stars" role="img" aria-label="Note ' + r.rating + ' sur 5">★★★★★</div>' +
+          '<div class="avis-agg__meta">Note moyenne Google · basé sur ' + r.count + ' avis</div>' +
+        '</div>' +
+      '</a>' +
       '<div class="avis-carousel">' +
         '<button class="avis-nav" data-dir="-1" aria-label="Avis précédents">‹</button>' +
         '<div class="avis-grid" id="avis-grid" aria-live="polite"></div>' +
@@ -125,7 +127,7 @@
   var mapsEmbed = "https://maps.google.com/maps?q=" + encodeURIComponent(i.mapsQuery) + "&t=&z=15&ie=UTF8&iwloc=&output=embed";
   var mapsLink = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(i.mapsQuery);
   document.getElementById("view-contact").innerHTML =
-    '<div class="view-head"><p class="eyebrow">Nous trouver</p><h2>Contact</h2><div class="rule"></div></div>' +
+    '<div class="view-head"><p class="eyebrow">Nous trouver</p><h1>Contact</h1><div class="rule"></div></div>' +
     '<div class="contact-grid">' +
       '<div class="contact-info">' +
         '<a class="phone" href="tel:' + i.phoneIntl + '">' + i.phone + '</a>' +
@@ -173,7 +175,7 @@
   var SUN = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>';
   var MOON = '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M20.5 13.2A8.2 8.2 0 1 1 10.8 3.5a6.4 6.4 0 0 0 9.7 9.7z"/></svg>';
   var tbtn = document.getElementById("theme-toggle");
-  function setTheme(t) { document.documentElement.setAttribute("data-theme", t); if (tbtn) tbtn.innerHTML = (t === "dark") ? SUN : MOON; }
+  function setTheme(t) { document.documentElement.setAttribute("data-theme", t); if (tbtn) { tbtn.innerHTML = (t === "dark") ? SUN : MOON; tbtn.setAttribute("aria-pressed", t === "dark"); } }
   var saved; try { saved = localStorage.getItem("cp-theme"); } catch (e) {}
   setTheme(saved || "light"); // défaut = identité du site (clair) ; toggle + localStorage pour l'autre
   if (tbtn) tbtn.addEventListener("click", function () { var nt = (document.documentElement.getAttribute("data-theme") === "dark") ? "light" : "dark"; var el = document.documentElement; el.classList.add("theme-anim"); setTheme(nt); try { localStorage.setItem("cp-theme", nt); } catch (e) {} window.setTimeout(function () { el.classList.remove("theme-anim"); }, 500); });

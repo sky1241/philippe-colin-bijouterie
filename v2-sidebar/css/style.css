@@ -1,30 +1,32 @@
 /* =========================================================================
-   Colin Philippe — V1 « Élégante · nav haute · ZÉRO défilement »
-   Tokens = digest bible-ux (WEB.md §CP/§AP/§J/§CS/§U + VALUES.md).
-   Contrastes vérifiés WCAG AA (21/21 paires). Ne pas éditer les hex sans revérif.
+   Colin Philippe — V2 « Rail latéral · palette PLATINE/PERLE FROIDE · ZÉRO défilement »
+   Identité DISTINCTE de V1 (or chaud) : neutres perle froids + accent champagne/acier.
+   Tokens = digest bible-ux (WEB.md §CP 60-30-10 / §22 contraste + VALUES.md).
+   Contrastes recalculés WCAG (luminance relative) — table dans le rapport de livraison.
+   Ajustés vs ancres : on-gold #111015 (btn/badge passe 4.5), dark border-strong #6E6F77 (≥3 sole boundary).
    ========================================================================= */
 
 /* ------------------------------ TOKENS ------------------------------ */
 :root {
-  /* 60% dominante */
-  --color-bg-page: #FAF6EE;
+  /* 60% dominante — perle froide (≠ V1 ivoire chaud) */
+  --color-bg-page: #F6F4F1;
   --color-surface-1: #FFFFFF;
-  --color-surface-2: #F2EADA;
-  /* 30% texte & structure (neutres chauds tintés or) */
-  --color-ink: #1C1813;
-  --color-ink-soft: #5A5144;
-  --color-border-subtle: #E7DECC;
-  --color-border-strong: #8C7B5D;
-  /* 10% accent or */
-  --color-gold: #A9863F;
-  --color-gold-hover: #A07E3A;
-  --color-gold-strong: #775B24;
-  --color-gold-soft: #EFE4CB;
+  --color-surface-2: #EAE8E3;
+  /* 30% texte & structure (neutres perle froids) */
+  --color-ink: #1A1A1F;
+  --color-ink-soft: #57554F;
+  --color-border-subtle: #DEDCD6;
+  --color-border-strong: #8A887F;
+  /* 10% accent champagne/acier — or FROID */
+  --color-gold: #8C7C57;            /* UI / CTA-fond / bordures / large uniquement (3.72:1 sur bg) */
+  --color-gold-hover: #7E6F4C;
+  --color-gold-strong: #665A38;     /* or TEXTE ≤18px, eyebrow, prix, liens, nav active (6.2:1 sur bg) */
+  --color-gold-soft: #E7E3D6;
   /* on-colors */
-  --color-on-gold: var(--color-ink);
+  --color-on-gold: #111015;         /* near-black froid → texte/badge sur or passe AA (4.63:1) */
   --color-on-ink: #FFFFFF;
   --color-focus: var(--color-gold-strong);
-  --color-star: #B7791F;            /* étoiles avis — or profond (≥3:1 sur ivoire, bible §CP) */
+  --color-star: #7A6A45;            /* étoiles avis — or froid (≥4.8:1 sur bg, §CP) */
 
   /* typo */
   --font-display: "Fraunces", "Iowan Old Style", Georgia, serif;
@@ -48,8 +50,8 @@
 
   /* radius / shadow / focus / motion */
   --radius-sm: 8px; --radius-md: 12px; --radius-pill: 9999px;
-  --shadow-sm: 0 1px 2px rgba(28,24,19,.06);
-  --shadow: 0 10px 30px rgba(28,24,19,.12), 0 2px 6px rgba(28,24,19,.06);
+  --shadow-sm: 0 1px 2px rgba(18,19,23,.06);
+  --shadow: 0 10px 30px rgba(18,19,23,.12), 0 2px 6px rgba(18,19,23,.06);
   --dur-hover: 150ms; --dur-state: 200ms; --dur-enter: 300ms;
   --ease-out: cubic-bezier(0,0,.2,1); --ease-in: cubic-bezier(.4,0,1,1); --ease-in-out: cubic-bezier(.4,0,.2,1);
 
@@ -57,14 +59,15 @@
   --z-sticky: 10; --z-backdrop: 40; --z-drawer: 50;
 }
 
-/* ===== THÈME SOMBRE (toggle) — palette bible-ux §CP dark, 22/22 AA ===== */
+/* ===== THÈME SOMBRE (toggle) — near-black FROID (≠ sombre chaud V1), ratios recalculés ===== */
 :root[data-theme="dark"] {
-  --color-bg-page: #17140E; --color-surface-1: #211C14; --color-surface-2: #2B2418;
-  --color-ink: #F2EBDC; --color-ink-soft: #B7AC97; --color-border-subtle: #33291B; --color-border-strong: #857556;
-  --color-gold: #CBA155; --color-gold-hover: #D9B368; --color-gold-strong: #E4C074; --color-gold-soft: #33280F;
-  --color-on-gold: #1E1810; --color-on-ink: #1E1810; --color-focus: #E4C074; --color-star: #F2B84A;
+  --color-bg-page: #16171B; --color-surface-1: #1E1F24; --color-surface-2: #23242A;
+  --color-ink: #ECEBE6; --color-ink-soft: #B7B6B0; --color-border-subtle: #33343A; --color-border-strong: #6E6F77;
+  --color-gold: #B7A578; --color-gold-hover: #C4B489; --color-gold-strong: #C9BA92; --color-gold-soft: #2A2A22;
+  --color-on-gold: #16171B; --color-on-ink: #16171B; --color-focus: #C9BA92; --color-star: #C9A24B;
 }
-[data-theme="dark"] .product-card, [data-theme="dark"] .avis-card, [data-theme="dark"] .avis-nav { border: 1px solid rgba(255,255,255,.07); }
+/* cartes produit : la photo est la frontière → hairline discret suffit en sombre */
+[data-theme="dark"] .product-card { border: 1px solid rgba(255,255,255,.07); }
 
 /* bouton toggle thème (flottant, visible partout) */
 .theme-toggle { position: fixed; bottom: 20px; right: 20px; z-index: var(--z-drawer); width: 44px; height: 44px; border-radius: var(--radius-pill); border: 1px solid var(--color-border-strong); background: var(--color-surface-1); color: var(--color-ink); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; box-shadow: var(--shadow-sm); transition: color var(--dur-hover) var(--ease-out), border-color var(--dur-hover) var(--ease-out), background var(--dur-hover) var(--ease-out); }
@@ -128,25 +131,35 @@ h1, h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-hei
 .brand__sub { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: var(--color-gold-strong); margin-top: 4px; }
 
 .sidebar {
-  flex: 0 0 264px; display: flex; flex-direction: column;
+  flex: 0 0 272px; display: flex; flex-direction: column; position: relative; overflow: hidden;
   background: var(--color-surface-2); border-right: 1px solid var(--color-border-subtle);
   padding: clamp(1.25rem, 3vh, 2rem) var(--space-6);
 }
-.sidebar__brand { margin-bottom: var(--space-8); }
+.sidebar::before { content: ""; position: absolute; inset: 0; background: radial-gradient(135% 55% at 50% 112%, rgba(140,124,87,.16), transparent 72%); pointer-events: none; }
+.sidebar::after { content: ""; position: absolute; top: 7%; bottom: 7%; right: 0; width: 2px; background: linear-gradient(180deg, transparent, var(--color-gold) 42%, var(--color-gold) 58%, transparent); }
+.sidebar > * { position: relative; z-index: 1; }
+.sidebar__feature { margin: var(--space-2) 0 0; }
+.sidebar__feature img { width: 100%; height: clamp(68px, 9vh, 100px); object-fit: cover; border-radius: var(--radius-md); display: block; box-shadow: var(--shadow-sm); }
+.sidebar__feature p { font-family: var(--font-display); font-style: italic; font-size: .92rem; color: var(--color-ink-soft); text-align: center; margin: var(--space-1) 0 0; line-height: 1.3; }
+.sidebar__brand { margin-bottom: var(--space-3); }
 .sidebar__brand .brand__name { font-size: 1.6rem; }
 .sidebar__nav { display: flex; flex-direction: column; gap: 2px; }
 .nav-link {
   font-size: var(--fs-body); font-weight: var(--fw-medium); color: var(--color-ink);
-  padding: var(--space-3) var(--space-4); min-height: 44px; display: flex; align-items: center;
+  padding: var(--space-2) var(--space-4); min-height: 40px; display: flex; align-items: center;
   border-left: 3px solid transparent; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; letter-spacing: .01em;
   transition: color var(--dur-hover) var(--ease-out), background-color var(--dur-hover) var(--ease-out), border-color var(--dur-hover) var(--ease-out);
 }
 .nav-link:hover { color: var(--color-gold-strong); background: var(--color-gold-soft); }
-.nav-link[aria-current="page"] { color: var(--color-gold-strong); border-left-color: var(--color-gold); background: rgba(169,134,63,.10); font-weight: var(--fw-semibold); }
-.sidebar__foot { margin-top: auto; padding-top: var(--space-6); border-top: 1px solid var(--color-border-subtle); display: flex; flex-direction: column; gap: var(--space-2); }
+.nav-link[aria-current="page"] { color: var(--color-gold-strong); border-left-color: var(--color-gold); background: rgba(140,124,87,.10); font-weight: var(--fw-semibold); }
+/* Cibles tactiles ≥44px sur tout appareil tactile — WEB.md §21 (best practice) + §171 (pointer: coarse). Souris = 40px (WEB.md « Sidebar navigation » item height 40-48px). */
+@media (pointer: coarse) { .nav-link { min-height: 44px; padding: var(--space-3) var(--space-4); } }
+.sidebar__foot { margin-top: auto; padding-top: var(--space-4); border-top: 1px solid var(--color-border-subtle); display: flex; flex-direction: column; gap: var(--space-1); }
 .sidebar__foot .foot-label { font-size: var(--fs-caption); letter-spacing: .12em; text-transform: uppercase; color: var(--color-gold-strong); }
-.sidebar__foot .foot-phone { font-family: var(--font-display); font-size: 1.35rem; font-weight: var(--fw-bold); color: var(--color-ink); }
+.sidebar__foot .foot-phone { display: inline-flex; align-items: center; font-family: var(--font-display); font-size: 1.45rem; font-weight: var(--fw-bold); color: var(--color-ink); letter-spacing: .01em; }
 .sidebar__foot .foot-phone:hover { color: var(--color-gold-strong); }
+.sidebar__foot .foot-hours { font-size: var(--fs-caption); color: var(--color-ink-soft); }
+@media (pointer: coarse) { .sidebar__foot .foot-phone { min-height: 44px; } }
 
 .content { flex: 1 1 auto; min-width: 0; }
 
@@ -175,10 +188,11 @@ h1, h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-hei
 
 /* padding interne commun aux vues « contenu » */
 .view--pad { padding: clamp(1rem, 3vh, 2rem) clamp(1rem, 4vw, 2.5rem); }
-.view-head { flex: 0 0 auto; text-align: center; margin-bottom: clamp(.5rem, 2vh, 1.25rem); }
-.view-head h2 { font-size: var(--fs-h2); }
-.view-head .intro { color: var(--color-ink-soft); font-size: var(--fs-small); margin-top: var(--space-2); }
-.view-head .rule { width: 44px; height: 2px; background: var(--color-gold); margin: var(--space-3) auto 0; transform: scaleX(0); transform-origin: center; transition: transform .7s var(--ease-out) .3s; }
+/* V2 signature : têtes de vue ALIGNÉES À GAUCHE (exploite le rail) — dé-clone de V1 centré */
+.view-head { flex: 0 0 auto; text-align: left; margin-bottom: clamp(.5rem, 2vh, 1.25rem); }
+.view-head h1, .view-head h2 { font-size: var(--fs-h2); }
+.view-head .intro { color: var(--color-ink-soft); font-size: var(--fs-small); margin-top: var(--space-2); max-width: 62ch; }
+.view-head .rule { width: 44px; height: 2px; background: var(--color-gold); margin: var(--space-3) 0 0; transform: scaleX(0); transform-origin: left; transition: transform .7s var(--ease-out) .3s; }
 .view.is-active .view-head .rule { transform: scaleX(1); }
 
 /* ------------------------------ VUE ACCUEIL (hero) ------------------------------ */
@@ -191,7 +205,7 @@ h1, h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-hei
 .hero__bg img { width: 100%; height: 100%; object-fit: cover; }
 .hero::after {
   content: ""; position: absolute; inset: 0; z-index: 1;
-  background: linear-gradient(180deg, rgba(28,24,19,.58), rgba(28,24,19,.50) 45%, rgba(28,24,19,.66));
+  background: linear-gradient(180deg, rgba(18,19,23,.58), rgba(18,19,23,.50) 45%, rgba(18,19,23,.66));
 }
 .hero > *:not(.hero__bg) { position: relative; z-index: 2; }
 .hero__eyebrow { color: var(--color-gold-soft); font-size: var(--fs-caption); letter-spacing: .28em; text-transform: uppercase; }
@@ -224,8 +238,8 @@ h1, h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-hei
 @media (hover: hover) { .product-card:hover .product-card__media img { transform: scale(1.04); } }
 .product-card__body { flex: 0 0 auto; display: flex; flex-direction: column; height: 8rem; overflow: hidden; padding: var(--space-3) var(--space-4) var(--space-4); } /* hauteur FIXE → toutes les images à la même hauteur + prix alignés */
 .product-card__name { font-family: var(--font-display); font-weight: var(--fw-semibold); font-size: 1.05rem; line-height: 1.25;
-  min-height: 2.5em; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; } /* 2 lignes réservées → prix aligné sur toute la ligne */
-.product-card__spec { font-size: var(--fs-caption); color: var(--color-ink-soft); margin-top: 4px; letter-spacing: .02em; }
+  height: 2.5em; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; } /* hauteur nom FIXE 2 lignes */ /* 2 lignes réservées → prix aligné sur toute la ligne */
+.product-card__spec { font-size: var(--fs-caption); color: var(--color-ink-soft); margin-top: 4px; letter-spacing: .02em; line-height: 1.3; height: 2.6em; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; } /* matière FIXE 2 lignes → prix jamais coupé + tout aligné */
 .product-card__price { font-size: var(--fs-small); font-weight: var(--fw-semibold); color: var(--color-gold-strong); margin-top: auto; padding-top: var(--space-2); } /* prix collé en bas → aligné (bible §Equal-Height Cards) */
 
 /* ------------------------------ VUE AVIS ------------------------------ */
@@ -234,10 +248,11 @@ h1, h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-hei
 .avis-agg { text-align: center; }
 .avis-agg__score { font-family: var(--font-display); font-size: clamp(2.5rem, 2rem + 2vw, 3.75rem); font-weight: var(--fw-bold); line-height: 1; }
 .avis-agg__stars { color: var(--color-star); font-size: 1.4rem; letter-spacing: 3px; margin-top: var(--space-2); }
-.avis-agg__meta { font-size: var(--fs-small); color: var(--color-ink-soft); margin-top: var(--space-2); }
+.avis-agg__meta { display: inline-block; font-size: var(--fs-small); color: var(--color-ink-soft); margin-top: var(--space-2); text-decoration: underline; text-decoration-color: var(--color-border-strong); text-underline-offset: 3px; }
+a.avis-agg__meta:hover { color: var(--color-gold-strong); text-decoration-color: var(--color-gold); }
 .avis-grid { display: flex; gap: clamp(.75rem, 1.5vw, 1.25rem); width: 100%; max-width: 1100px; }
 .avis-card {
-  flex: 1 1 0; min-width: 0; background: var(--color-surface-1); border: 1px solid var(--color-border-subtle);
+  flex: 1 1 0; min-width: 0; background: var(--color-surface-1); border: 1px solid var(--color-border-strong); /* SEULE frontière → ≥3:1 (§5) */
   border-radius: var(--radius-md); padding: var(--space-5); display: flex; flex-direction: column; gap: var(--space-2);
 }
 .avis-card__stars { color: var(--color-star); font-size: .95rem; letter-spacing: 2px; }
@@ -253,8 +268,10 @@ h1, h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-hei
 .avis-nav { flex: 0 0 auto; align-self: center; width: 42px; height: 42px; border-radius: var(--radius-pill); border: 1px solid var(--color-border-strong); background: var(--color-surface-1); color: var(--color-ink); font-size: 1.5rem; line-height: 1; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: background var(--dur-hover) var(--ease-out), color var(--dur-hover) var(--ease-out), border-color var(--dur-hover) var(--ease-out); }
 .avis-nav:hover { background: var(--color-gold); color: var(--color-on-gold); border-color: var(--color-gold); }
 .avis-dots { display: flex; gap: var(--space-2); justify-content: center; }
-.avis-dot { width: 8px; height: 8px; border-radius: var(--radius-pill); border: 0; background: var(--color-border-strong); opacity: .4; cursor: pointer; padding: 0; transition: opacity var(--dur-hover), background var(--dur-hover), width var(--dur-hover); }
-.avis-dot.is-on { opacity: 1; background: var(--color-gold); width: 22px; }
+/* zone de tap ≥24px (WCAG 2.5.8 §21) — puce visible 8px via ::before */
+.avis-dot { width: 24px; height: 24px; border: 0; background: none; padding: 0; cursor: pointer; position: relative; display: inline-flex; align-items: center; justify-content: center; }
+.avis-dot::before { content: ""; width: 8px; height: 8px; border-radius: var(--radius-pill); background: var(--color-border-strong); opacity: .4; transition: opacity var(--dur-hover), background var(--dur-hover), width var(--dur-hover); }
+.avis-dot.is-on::before { opacity: 1; background: var(--color-gold); width: 22px; }
 .avis-card { position: relative; }
 .avis-card__badge { position: absolute; top: var(--space-3); right: var(--space-3); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; font-weight: var(--fw-bold); color: var(--color-on-gold); background: var(--color-gold); padding: 3px 7px; border-radius: var(--radius-pill); }
 .avis-card__text { display: -webkit-box; -webkit-line-clamp: 4; line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
@@ -288,7 +305,7 @@ h1, h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-hei
 }
 .atelier-media img { width: 100%; height: 100%; object-fit: cover; }
 /* fin liseré or, discret — rattache la photo à l'identité */
-.atelier-media::after { content: ""; position: absolute; inset: 0; border-radius: var(--radius-md); box-shadow: inset 0 0 0 1px rgba(169,134,63,.16); pointer-events: none; }
+.atelier-media::after { content: ""; position: absolute; inset: 0; border-radius: var(--radius-md); box-shadow: inset 0 0 0 1px rgba(140,124,87,.16); pointer-events: none; }
 .atelier-body { display: flex; flex-direction: column; justify-content: center; gap: var(--space-4); max-width: 54ch; }
 .atelier-title { font-size: var(--fs-h2); margin-top: var(--space-1); }
 .atelier-lead { color: var(--color-ink-soft); font-size: var(--fs-body); line-height: var(--lh-copy); }
@@ -309,14 +326,20 @@ h1, h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-hei
   .mobile-bar .brand__name { font-size: 1.15rem; }
   .sidebar {
     position: fixed; top: 0; left: 0; bottom: 0; width: min(80vw, 300px); z-index: var(--z-drawer);
-    transform: translateX(-100%); transition: transform var(--dur-enter) var(--ease-out);
-    box-shadow: 12px 0 30px rgba(28,24,19,.14); overflow-y: auto;
+    transform: translateX(-100%); visibility: hidden;
+    transition: transform var(--dur-enter) var(--ease-out), visibility var(--dur-enter);
+    box-shadow: 12px 0 30px rgba(18,19,23,.14); overflow-y: auto;
   }
-  .sidebar.is-open { transform: translateX(0); }
-  .nav-backdrop.is-open { display: block; position: fixed; inset: 0; z-index: var(--z-backdrop); background: rgba(28,24,19,.4); }
+  .sidebar.is-open { transform: translateX(0); visibility: visible; }  /* drawer fermé = non focusable (a11y §29) */
+  /* drawer compact : la photo « feature » est superflue en nav mobile → pied (téléphone) au-dessus du pli */
+  .sidebar__feature { display: none; }
+  .nav-link { min-height: 44px; padding: var(--space-3) var(--space-4); }
+  .nav-backdrop.is-open { display: block; position: fixed; inset: 0; z-index: var(--z-backdrop); background: rgba(18,19,23,.4); }
   body.nav-open .nav-toggle span { background: transparent; }
   body.nav-open .nav-toggle span::before { transform: translateY(6px) rotate(45deg); }
   body.nav-open .nav-toggle span::after { transform: translateY(-6px) rotate(-45deg); }
+  /* FAB thème déplacé dans la barre du haut (ne masque plus prix/5e carte) — §4 */
+  .theme-toggle { top: 6px; right: 72px; bottom: auto; width: 44px; height: 44px; box-shadow: none; }
 }
 
 @media (max-width: 767px) {
@@ -339,9 +362,16 @@ h1, h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-hei
   .contact-map { display: none; }
   /* Atelier : photo en haut, texte dessous — tient sans scroll */
   .atelier-split { grid-template-columns: 1fr; grid-auto-rows: min-content; align-content: start; gap: clamp(.75rem, 2.5vh, 1.25rem); }
-  .atelier-media { height: clamp(150px, 32vh, 300px); }
+  /* photo plus basse → la 3e rangée des 6 points reste dans le champ à 360×640 (§3) */
+  .atelier-media { height: clamp(120px, 20vh, 170px); }
   .atelier-body { justify-content: flex-start; gap: var(--space-3); max-width: none; }
   .atelier-lead { font-size: var(--fs-small); }
+}
+
+@media (max-width: 400px) {
+  /* têtes de vue allégées : intro + barre or masquées → cartes catégorie plus hautes/lisibles (§3) */
+  .view-head { margin-bottom: var(--space-2); }
+  .view-head .intro, .view-head .rule { display: none; }
 }
 
 @media (max-width: 420px) {
@@ -382,6 +412,8 @@ h1, h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-hei
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  /* neutralise le fondu de thème (spécificité égale à html.theme-anim * → gagne sur tie) */
+  html.theme-anim, html.theme-anim * { transition-duration: .01ms !important; }
   .product-card:hover { transform: none; }
   .product-card:hover .product-card__media img { transform: none; }
 }

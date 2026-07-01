@@ -52,7 +52,7 @@
   document.getElementById("category-views").innerHTML = S.categories.map(function (c, ci) {
     var rest = c.items.slice(1, 5);
     return '<section class="view view--pad view--category" id="view-' + c.slug + '" aria-label="' + c.title + '">' +
-      '<div class="cat-head view-head"><p class="kicker"><span class="n serif">' + pad2(ci + 1) + '</span> Collection</p><h2>' + c.title + '</h2><p class="intro">' + c.intro + '</p></div>' +
+      '<div class="cat-head view-head"><p class="kicker"><span class="n">' + pad2(ci + 1) + '</span> Collection</p><h2>' + c.title + '</h2><p class="intro">' + c.intro + '</p></div>' +
       '<div class="cat-stage">' +
         piece(c.items[0], true) +
         '<div class="cat-grid">' + rest.map(function (p) { return piece(p, false); }).join("") + '</div>' +
@@ -93,7 +93,7 @@
         '<div class="avis-agg__score">' + r.rating + '</div>' +
         '<div class="avis-agg__stars" role="img" aria-label="Note ' + r.rating + ' sur 5">★★★★★</div>' +
         '<div class="avis-agg__meta">Note moyenne Google</div>' +
-        '<div class="avis-agg__meta">Basé sur ' + r.count + ' avis vérifiés</div>' +
+        '<a class="avis-agg__link" href="' + r.googleUrl + '" target="_blank" rel="noopener">Basé sur ' + r.count + ' avis Google</a>' +
       '</div>' +
       '<div class="avis-carousel">' +
         '<button class="avis-nav" data-dir="-1" aria-label="Avis précédents">‹</button>' +
@@ -158,20 +158,54 @@
   /* ---- menu plein écran ---- */
   var overlay = document.getElementById("overlay");
   var openBtn = document.getElementById("menu-open");
-  function openMenu() { overlay.classList.add("is-open"); openBtn.setAttribute("aria-expanded", "true"); }
-  function closeMenu() { overlay.classList.remove("is-open"); openBtn.setAttribute("aria-expanded", "false"); }
+  var closeBtn = document.getElementById("menu-close");
+  /* fond mis en `inert` + aria-hidden quand l'overlay est ouvert → Tab n'atteint pas les CTA du hero derrière (§100) */
+  var bgEls = [document.querySelector(".topbar"), document.getElementById("main"), document.getElementById("theme-toggle")];
+  function setBgInert(on) {
+    bgEls.forEach(function (el) {
+      if (!el) return;
+      if (on) { el.setAttribute("inert", ""); el.setAttribute("aria-hidden", "true"); }
+      else { el.removeAttribute("inert"); el.removeAttribute("aria-hidden"); }
+    });
+  }
+  function overlayFocusables() {
+    return Array.prototype.slice.call(overlay.querySelectorAll('a[href], button:not([disabled])'))
+      .filter(function (el) { return el === closeBtn || el.offsetWidth > 0 || el.offsetHeight > 0; });
+  }
+  function trap(e) {
+    if (e.key === "Escape") { e.preventDefault(); closeMenu(); return; }
+    if (e.key !== "Tab") return;
+    var f = overlayFocusables(); if (!f.length) return;
+    var first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+  function openMenu() {
+    overlay.classList.add("is-open");
+    openBtn.setAttribute("aria-expanded", "true");
+    setBgInert(true);
+    overlay.addEventListener("keydown", trap);
+    requestAnimationFrame(function () { closeBtn.focus(); });   /* focus initial = bouton Fermer (§100) */
+  }
+  function closeMenu() {
+    var wasOpen = overlay.classList.contains("is-open");
+    overlay.classList.remove("is-open");
+    openBtn.setAttribute("aria-expanded", "false");
+    overlay.removeEventListener("keydown", trap);
+    setBgInert(false);
+    if (wasOpen) openBtn.focus();                               /* focus rendu au déclencheur (§100) */
+  }
   openBtn.addEventListener("click", openMenu);
-  document.getElementById("menu-close").addEventListener("click", closeMenu);
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
+  closeBtn.addEventListener("click", closeMenu);
   overlay.addEventListener("click", function (e) { if (e.target.closest && e.target.closest(".ov-link")) closeMenu(); });
 
   /* ---- thème clair / sombre (toggle flottant, persistant) — V3 = SOMBRE par défaut ---- */
   var SUN = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>';
   var MOON = '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M20.5 13.2A8.2 8.2 0 1 1 10.8 3.5a6.4 6.4 0 0 0 9.7 9.7z"/></svg>';
   var tbtn = document.getElementById("theme-toggle");
-  function setTheme(t) { document.documentElement.setAttribute("data-theme", t); if (tbtn) tbtn.innerHTML = (t === "dark") ? SUN : MOON; }
+  function setTheme(t) { document.documentElement.setAttribute("data-theme", t); if (tbtn) { tbtn.innerHTML = (t === "dark") ? SUN : MOON; tbtn.setAttribute("aria-pressed", t === "dark" ? "true" : "false"); } }
   var saved; try { saved = localStorage.getItem("cp-theme"); } catch (e) {}
-  setTheme(saved || (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark"));
+  setTheme(saved || "dark");   /* V3 = SOMBRE par défaut (brief) — on n'écoute pas prefers-color-scheme au 1er chargement */
   if (tbtn) tbtn.addEventListener("click", function () { var nt = (document.documentElement.getAttribute("data-theme") === "dark") ? "light" : "dark"; var el = document.documentElement; el.classList.add("theme-anim"); setTheme(nt); try { localStorage.setItem("cp-theme", nt); } catch (e) {} window.setTimeout(function () { el.classList.remove("theme-anim"); }, 500); });
 
   showView(currentSlug());

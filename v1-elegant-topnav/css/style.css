@@ -54,6 +54,7 @@
   --ease-out: cubic-bezier(0,0,.2,1); --ease-in: cubic-bezier(.4,0,1,1); --ease-in-out: cubic-bezier(.4,0,.2,1);
 
   --header-h: 64px;
+  --gutter: clamp(1rem, 4vw, 2.5rem);   /* marge latérale header — sert d'ancrage au toggle thème mobile */
   --z-sticky: 10; --z-backdrop: 40; --z-drawer: 50;
 }
 
@@ -125,7 +126,7 @@ h1, h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-hei
 .site-header {
   flex: 0 0 auto; height: var(--header-h); z-index: var(--z-sticky);
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 clamp(1rem, 4vw, 2.5rem);
+  padding: 0 var(--gutter);
   background: rgba(250,246,238,.9); backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--color-border-subtle);
 }
@@ -148,6 +149,7 @@ h1, h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-hei
 .nav-link:hover { color: var(--color-gold-strong); }
 .nav-link:hover::after, .nav-link[aria-current="page"]::after { transform: scaleX(1); }
 .nav-link[aria-current="page"] { color: var(--color-gold-strong); }
+@media (pointer: coarse) { .nav-link { min-height: 44px; } } /* cible tactile ≥44px (WEB.md §target-size) */
 
 .nav-toggle {
   display: none; width: 44px; height: 44px; border: 1px solid var(--color-border-strong);
@@ -173,7 +175,7 @@ h1, h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-hei
 /* padding interne commun aux vues « contenu » */
 .view--pad { padding: clamp(1rem, 3vh, 2rem) clamp(1rem, 4vw, 2.5rem); }
 .view-head { flex: 0 0 auto; text-align: center; margin-bottom: clamp(.5rem, 2vh, 1.25rem); }
-.view-head h2 { font-size: var(--fs-h2); }
+.view-head h1 { font-size: var(--fs-h2); }   /* titre de vue promu en h1 (a11y) — taille inchangée = ex-h2 */
 .view-head .intro { color: var(--color-ink-soft); font-size: var(--fs-small); margin-top: var(--space-2); }
 .view-head .rule { width: 44px; height: 2px; background: var(--color-gold); margin: var(--space-3) auto 0; transform: scaleX(0); transform-origin: center; transition: transform .7s var(--ease-out) .3s; }
 .view.is-active .view-head .rule { transform: scaleX(1); }
@@ -221,13 +223,15 @@ h1, h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-hei
 @media (hover: hover) { .product-card:hover .product-card__media img { transform: scale(1.04); } }
 .product-card__body { flex: 0 0 auto; display: flex; flex-direction: column; height: 8rem; overflow: hidden; padding: var(--space-3) var(--space-4) var(--space-4); } /* hauteur FIXE → toutes les images à la même hauteur + prix alignés */
 .product-card__name { font-family: var(--font-display); font-weight: var(--fw-semibold); font-size: 1.05rem; line-height: 1.25;
-  min-height: 2.5em; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; } /* 2 lignes réservées → prix aligné sur toute la ligne */
-.product-card__spec { font-size: var(--fs-caption); color: var(--color-ink-soft); margin-top: 4px; letter-spacing: .02em; }
+  height: 2.5em; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; } /* hauteur nom FIXE 2 lignes */ /* 2 lignes réservées → prix aligné sur toute la ligne */
+.product-card__spec { font-size: var(--fs-caption); color: var(--color-ink-soft); margin-top: 4px; letter-spacing: .02em; line-height: 1.3; height: 2.6em; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; } /* matière FIXE 2 lignes → prix jamais coupé + tout aligné */
 .product-card__price { font-size: var(--fs-small); font-weight: var(--fw-semibold); color: var(--color-gold-strong); margin-top: auto; padding-top: var(--space-2); } /* prix collé en bas → aligné sur toute la ligne (bible §Equal-Height Cards) */
 
 /* ------------------------------ VUE AVIS ------------------------------ */
 #view-avis { justify-content: center; }
 .avis-wrap { flex: 0 1 auto; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(1rem, 3vh, 1.75rem); margin-top: clamp(1rem, 3vh, 2rem); }
+.avis-agg__link { display: inline-block; color: inherit; text-decoration: none; border-radius: var(--radius-sm); } /* bloc note cliquable → fiche Google */
+.avis-agg__link:hover .avis-agg__meta { color: var(--color-gold-strong); text-decoration: underline; }
 .avis-agg { text-align: center; }
 .avis-agg__score { font-family: var(--font-display); font-size: clamp(2.5rem, 2rem + 2vw, 3.75rem); font-weight: var(--fw-bold); line-height: 1; }
 .avis-agg__stars { color: var(--color-star); font-size: 1.4rem; letter-spacing: 3px; margin-top: var(--space-2); }
@@ -250,8 +254,9 @@ h1, h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-hei
 .avis-nav { flex: 0 0 auto; align-self: center; width: 42px; height: 42px; border-radius: var(--radius-pill); border: 1px solid var(--color-border-strong); background: var(--color-surface-1); color: var(--color-ink); font-size: 1.5rem; line-height: 1; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: background var(--dur-hover) var(--ease-out), color var(--dur-hover) var(--ease-out), border-color var(--dur-hover) var(--ease-out); }
 .avis-nav:hover { background: var(--color-gold); color: var(--color-on-gold); border-color: var(--color-gold); }
 .avis-dots { display: flex; gap: var(--space-2); justify-content: center; }
-.avis-dot { width: 8px; height: 8px; border-radius: var(--radius-pill); border: 0; background: var(--color-border-strong); opacity: .4; cursor: pointer; padding: 0; transition: opacity var(--dur-hover), background var(--dur-hover), width var(--dur-hover); }
-.avis-dot.is-on { opacity: 1; background: var(--color-gold); width: 22px; }
+.avis-dot { width: 24px; height: 24px; background: none; border: 0; padding: 0; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; } /* zone tap ≥24px (WEB.md §target-size / WCAG 2.5.8) — puce dessinée en ::before */
+.avis-dot::before { content: ""; width: 8px; height: 8px; border-radius: var(--radius-pill); background: var(--color-border-strong); opacity: .4; transition: opacity var(--dur-hover), background var(--dur-hover), width var(--dur-hover); }
+.avis-dot.is-on::before { opacity: 1; background: var(--color-gold); width: 22px; }
 .avis-card { position: relative; }
 .avis-card__badge { position: absolute; top: var(--space-3); right: var(--space-3); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; font-weight: var(--fw-bold); color: var(--color-on-gold); background: var(--color-gold); padding: 3px 7px; border-radius: var(--radius-pill); }
 .avis-card__text { display: -webkit-box; -webkit-line-clamp: 4; line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
@@ -300,17 +305,23 @@ h1, h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-hei
 /* ------------------------------ RESPONSIVE ------------------------------ */
 /* 9 items sur la barre haute → hamburger relevé à 1040px pour éviter le débordement */
 @media (max-width: 1040px) {
+  /* FIX menu mort : backdrop-filter établit un bloc conteneur qui clippait le drawer position:fixed à la hauteur du header (~64px). On le retire là où la nav devient un drawer fixe. Le fond rgba(.9) suffit. */
+  .site-header { backdrop-filter: none; -webkit-backdrop-filter: none; }
   .site-nav {
     position: fixed; inset: 0 0 0 auto; width: min(78vw, 320px); z-index: var(--z-drawer);
     flex-direction: column; align-items: stretch; justify-content: flex-start; gap: 0;
     background: var(--color-bg-page); padding: calc(var(--header-h) + var(--space-4)) var(--space-5) var(--space-5);
-    transform: translateX(100%); transition: transform var(--dur-enter) var(--ease-out);
+    transform: translateX(100%); visibility: hidden;
+    transition: transform var(--dur-enter) var(--ease-out), visibility 0s linear var(--dur-enter);
     box-shadow: -12px 0 30px rgba(28,24,19,.12); overflow-y: auto;
   }
-  .site-nav.is-open { transform: translateX(0); }
+  /* fix 10 : drawer non focusable quand fermé (visibility levée à l'ouverture, reposée après l'anim de fermeture) */
+  .site-nav.is-open { transform: translateX(0); visibility: visible; transition: transform var(--dur-enter) var(--ease-out), visibility 0s; }
   .nav-link { padding: var(--space-3) 0; border-bottom: 1px solid var(--color-border-subtle); min-height: 48px; }
   .nav-link::after { display: none; }
   .nav-toggle { display: inline-flex; z-index: calc(var(--z-drawer) + 1); }
+  /* fix 4 : toggle thème remonté dans la barre haute, à gauche du hamburger → ne masque plus le contenu ni le dernier prix des vues catégorie */
+  .theme-toggle { top: calc((var(--header-h) - 40px) / 2); right: calc(var(--gutter) + 44px + var(--space-2)); bottom: auto; width: 40px; height: 40px; }
   .nav-backdrop.is-open { display: block; position: fixed; inset: 0; z-index: var(--z-backdrop); background: rgba(28,24,19,.4); }
   body.nav-open .nav-toggle span { background: transparent; }
   body.nav-open .nav-toggle span::before { transform: translateY(6px) rotate(45deg); }
@@ -320,13 +331,16 @@ h1, h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-hei
 @media (max-width: 767px) {
   :root { --header-h: 56px; }
   .brand__name { font-size: 1.15rem; }
-  /* Catégorie : 5 cartes empilées en lignes, remplissent l'écran */
+  /* Catégorie : 5 cartes empilées en lignes, remplissent l'écran (view-head resserré, hauteurs de texte auto) */
+  .view--category { padding-top: clamp(.7rem, 2vh, 1.25rem); padding-bottom: clamp(.7rem, 2vh, 1.25rem); }
+  .view--category .view-head { margin-bottom: var(--space-2); }
   .product-row { flex-direction: column; gap: var(--space-2); }
   .product-card { flex-direction: row; align-items: stretch; }
   .product-card__media { flex: 0 0 38%; }
-  .product-card__body { flex: 1 1 auto; min-height: 0; height: auto; padding: var(--space-3) var(--space-4); display: flex; flex-direction: column; justify-content: center; }
-  .product-card__price { margin-top: var(--space-2); padding-top: 0; }
-  .product-card__name { font-size: 1rem; }
+  .product-card__body { flex: 1 1 auto; min-height: 0; height: auto; padding: var(--space-2) var(--space-4); display: flex; flex-direction: column; justify-content: center; gap: 2px; }
+  .product-card__name { font-size: 1rem; height: auto; line-height: 1.2; }   /* plus de hauteur fixe 2 lignes : le texte prend sa place réelle */
+  .product-card__spec { height: auto; margin-top: 0; }
+  .product-card__price { margin-top: 2px; padding-top: 0; }
   @media (hover: hover) { .product-card:hover { transform: none; } }
   /* Avis : 2×2 compact */
   .avis-grid { flex-wrap: wrap; }
@@ -342,6 +356,15 @@ h1, h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-hei
   .atelier-lead { font-size: var(--fs-small); max-width: none; }
   .atelier-points { gap: var(--space-1) var(--space-4); max-width: none; }
 }
+/* Catégorie sur petit écran (court ≤680px OU étroit ≤400px) : masque intro + filet, resserre → nom + matière + prix lisibles, 5 cartes entières sans scroll */
+@media (max-width: 767px) and (max-height: 680px), (max-width: 400px) {
+  .view--category .view-head .intro, .view--category .view-head .rule { display: none; }
+  .view--category .view-head { margin-bottom: var(--space-1); }
+  .view--category .view-head h1 { font-size: 1.4rem; }
+  .view--category .product-row { gap: var(--space-1); }
+  .view--category .product-card__spec { -webkit-line-clamp: 1; line-clamp: 1; }
+}
+
 /* écran très court : on masque la photo pour garantir le zéro-scroll (texte prioritaire) */
 @media (max-width: 767px) and (max-height: 620px) {
   .atelier-media { display: none; }
@@ -382,6 +405,8 @@ h1, h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-hei
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  /* le fondu de thème (html.theme-anim *) force ses transitions en !important → on le neutralise ici (même spécificité, plus bas dans la cascade) */
+  html.theme-anim, html.theme-anim *, html.theme-anim *::before, html.theme-anim *::after { transition-duration: .01ms !important; }
   .product-card:hover { transform: none; }
   .product-card:hover .product-card__media img { transform: none; }
 }

@@ -3,21 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Colin Philippe — Bijouterie-Horlogerie · Chêne-Bourg (Genève)</title>
-  <meta name="description" content="Colin Philippe, bijouterie-horlogerie à Chêne-Bourg depuis 1990. Création de bijoux à la main : colliers, bracelets, bagues, boucles d'oreilles, montres. Changement de pile, bracelets, réparation.">
-  <meta name="theme-color" content="#FAF6EE">
+  <title>Colin Philippe — Bijouterie-Horlogerie · Chêne-Bourg</title>
+  <meta name="description" content="Bijouterie-horlogerie à Chêne-Bourg (Genève) depuis 1990. Création de bijoux à la main, changement de pile, bracelets de montre, réparation.">
+  <meta name="theme-color" content="#F6F4F1">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="icon" href="../shared/favicon.svg" type="image/svg+xml">
+  <!-- canonical / og:url : URL GitHub Pages du repo (à remplacer par le domaine final du client au lancement). -->
+  <link rel="canonical" href="https://sky1241.github.io/bijouterie/v2-sidebar/">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="fr_CH">
+  <meta property="og:site_name" content="Colin Philippe — Bijouterie-Horlogerie">
+  <meta property="og:url" content="https://sky1241.github.io/bijouterie/v2-sidebar/">
   <meta property="og:title" content="Colin Philippe — Bijouterie-Horlogerie · Chêne-Bourg">
   <meta property="og:description" content="Créateur de bijoux à la main depuis 1990 à Chêne-Bourg (Genève). Colliers, bracelets, bagues, boucles d'oreilles, montres. Changement de pile, bracelets, réparation.">
-  <meta property="og:image" content="https://images.pexels.com/photos/7167035/pexels-photo-7167035.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1600&amp;h=900&amp;fit=crop">
+  <meta property="og:image" content="https://images.pexels.com/photos/29043373/pexels-photo-29043373.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1600&amp;h=900&amp;fit=crop">
+  <meta property="og:image:width" content="1600">
+  <meta property="og:image:height" content="900">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="css/style.css">
-  <!-- Données structurées : PAS d'avis/note (les vrais ne sont pas encore connus, on ne publie pas de faux). -->
+  <!-- Données structurées : avis Google RÉELS (5,0 · 11 avis, récupérés manuellement par le client). aggregateRating + 2 avis publiés ci-dessous. Horaires non confirmés → openingHours volontairement absent. -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -28,11 +34,10 @@
     "telephone": "+41223487580",
     "email": "bijouteriecolin@hotmail.fr",
     "address": { "@type": "PostalAddress", "streetAddress": "Rue de Genève 71", "postalCode": "1225", "addressLocality": "Chêne-Bourg", "addressRegion": "GE", "addressCountry": "CH" },
-    "openingHours": ["Mo-Fr 10:00-19:00", "Sa 09:00-18:00"],
-    "aggregateRating": { "@type": "AggregateRating", "ratingValue": "5", "reviewCount": "11", "bestRating": "5" },
+    "aggregateRating": { "@type": "AggregateRating", "ratingValue": "5", "reviewCount": "11", "bestRating": "5", "worstRating": "1" },
     "review": [
-      { "@type": "Review", "author": { "@type": "Person", "name": "Nils Engelberts" }, "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "reviewBody": "Horloger bijoutier très aimable, très chaleureux. Très professionnel. Je recommande à 100%." },
-      { "@type": "Review", "author": { "@type": "Person", "name": "Michèle Perroud" }, "reviewRating": { "@type": "Rating", "ratingValue": "5" }, "reviewBody": "Monsieur Colin est un magicien ! Il aime son métier et ça se voit dans ses très belles créations." }
+      { "@type": "Review", "author": { "@type": "Person", "name": "Nils Engelberts" }, "datePublished": "2025-12", "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5", "worstRating": "1" }, "reviewBody": "Horloger bijoutier très aimable, très chaleureux. Très professionnel. Joli intérieur du magasin. Je recommande à 100% 🤗" },
+      { "@type": "Review", "author": { "@type": "Person", "name": "Michèle Perroud" }, "datePublished": "2024-07", "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5", "worstRating": "1" }, "reviewBody": "Monsieur Colin est un magicien ! Il trouve toujours une solution pour satisfaire sa clientèle. Il aime son métier et ça se voit dans ses très belles créations. Je lui fais confiance à 200%." }
     ]
   }
   </script>
@@ -55,10 +60,11 @@
         <span class="brand__sub">Bijouterie · Horlogerie</span>
       </a>
       <nav class="sidebar__nav" id="site-nav"></nav>
+      <div class="sidebar__feature" id="sidebar-feature"></div>
       <div class="sidebar__foot" id="sidebar-foot"></div>
     </aside>
 
-    <main class="content views" id="main">
+    <main class="content views" id="main" tabindex="-1">
       <section class="view view--home is-active" id="view-home" aria-label="Accueil"></section>
       <div id="category-views"></div>
       <section class="view view--pad view--atelier" id="view-atelier" aria-label="L'atelier"></section>
@@ -68,7 +74,7 @@
   </div>
   <div class="nav-backdrop" id="nav-backdrop" hidden></div>
 
-  <button class="theme-toggle" id="theme-toggle" aria-label="Basculer le thème clair / sombre"></button>
+  <button class="theme-toggle" id="theme-toggle" aria-label="Basculer le thème clair / sombre" aria-pressed="false"></button>
 
   <script src="../shared/site-data.js"></script>
   <script src="js/main.js"></script>

@@ -1,8 +1,8 @@
 /* =========================================================================
    Colin Philippe — Bijouterie·Horlogerie · DONNÉES PARTAGÉES (V1/V2/V3)
    Source unique de contenu. Chargée en <script> classique (file:// OK).
-   ⚠️ Avis = EXEMPLES (placeholder). Vrais avis Google non scrapables : à
-      remplacer manuellement. Infos boutique = vérifiées au registre du commerce.
+   Avis = VRAIS avis Google (récupérés manuellement — note 5,0 · 11 avis).
+      Photos = illustrations, à remplacer par les vraies. Infos = vérifiées.
    ========================================================================= */
 window.SITE = {
   info: {
@@ -30,7 +30,7 @@ window.SITE = {
       img: "https://images.pexels.com/photos/7167002/pexels-photo-7167002.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop"
     },
     mapsQuery: "Colin Philippe Rue de Genève 71 1225 Chêne-Bourg",
-    trust: ["Fait main en atelier", "Or & argent 18 ct", "Depuis 1990", "Devis gratuit"],
+    trust: ["Fait main en atelier", "Or 18 ct · argent 925", "Depuis 1990", "Devis gratuit"],
     services: [
       { t: "Création à la main", d: "Pièces uniques façonnées dans l'atelier, sur-mesure." },
       { t: "Changement de pile", d: "Remplacement rapide, en boutique, toutes marques." },
@@ -56,7 +56,7 @@ window.SITE = {
     ]},
     { slug: "bagues", label: "Bagues", title: "Bagues", intro: "Solitaires, alliances, chevalières — un serment qui dure.", items: [
       { name: "Solitaire Éternité", spec: "Platine · diamant brillant", price: "Sur devis", img: "https://images.pexels.com/photos/31087451/pexels-photo-31087451.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000&fit=crop" },
-      { name: "Alliance tressée", spec: "Or trois ors 18 ct", price: "dès CHF 1 290", img: "https://images.pexels.com/photos/32988751/pexels-photo-32988751.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000&fit=crop" },
+      { name: "Alliance tressée", spec: "Trois ors 18 ct", price: "dès CHF 1 290", img: "https://images.pexels.com/photos/32988751/pexels-photo-32988751.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000&fit=crop" },
       { name: "Chevalière armoriée", spec: "Or jaune · gravure main", price: "Sur devis", img: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&h=1000&fit=crop&q=80" },
       { name: "Bague Toi & Moi", spec: "Or blanc · deux pierres", price: "Sur devis", img: "https://images.pexels.com/photos/2849742/pexels-photo-2849742.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000&fit=crop" },
       { name: "Jonc diamant", spec: "Or rose 18 ct", price: "dès CHF 980", img: "https://images.pexels.com/photos/15351782/pexels-photo-15351782.jpeg?auto=compress&cs=tinysrgb&w=800&h=1000&fit=crop" }
@@ -82,6 +82,8 @@ window.SITE = {
     rating: "5,0",
     count: 11,
     placeholder: false,     // VRAIS avis Google (récupérés manuellement par Sky)
+    // Lien « voir sur Google » — remplacer par l'URL exacte de la fiche (onglet avis) quand dispo.
+    googleUrl: "https://www.google.com/maps/search/?api=1&query=Colin+Philippe+bijouterie+Rue+de+Gen%C3%A8ve+71+1225+Ch%C3%AAne-Bourg",
     items: [  // triés du plus récent au plus ancien (mise en avant des récents)
       { author: "Nils Engelberts", stars: 5, text: "Horloger bijoutier très aimable, très chaleureux. Très professionnel. Joli intérieur du magasin. Je recommande à 100% 🤗", ago: "il y a 7 mois", recent: true },
       { author: "Benjamin Huerta", stars: 5, text: "Accueillant, à l'écoute et très professionnel ! Une perle qui fait vivre l'art de la bijouterie avec finesse et passion. Je recommande vivement.", ago: "il y a 1 an", recent: true },
