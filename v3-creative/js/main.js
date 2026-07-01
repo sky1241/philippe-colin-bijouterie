@@ -9,6 +9,12 @@
   var pad2 = function (n) { return ("0" + n).slice(-2); };
   function stars(n) { var s = '<span aria-hidden="true">'; for (var k = 1; k <= 5; k++) s += (k <= n) ? '★' : '<span style="color:#4a4030">★</span>'; return s + '</span>'; }
   function initials(name) { return name.split(/\s+/).map(function (w) { return w.charAt(0); }).join("").slice(0, 2).toUpperCase(); }
+  function countUp(el, target, reduce) {
+    if (reduce || !window.requestAnimationFrame) { el.textContent = target.toFixed(1).replace(".", ","); return; }
+    var t0 = null, dur = 1000;
+    function step(ts) { if (t0 === null) t0 = ts; var p = Math.min((ts - t0) / dur, 1); el.textContent = (target * (1 - Math.pow(1 - p, 3))).toFixed(1).replace(".", ","); if (p < 1) requestAnimationFrame(step); }
+    requestAnimationFrame(step);
+  }
 
   /* nav items (avec numéro pour les catégories) */
   var navItems = [{ slug: "home", label: "Accueil", num: "" }]
@@ -53,8 +59,16 @@
     '</section>';
   }).join("");
 
-  /* ---- avis ---- */
+  /* ---- avis (carousel : rotation, récents en tête) ---- */
   var r = S.reviews;
+  function avisCard(a) {
+    return '<article class="avis-card">' +
+      (a.recent ? '<span class="avis-card__badge">Récent</span>' : '') +
+      '<div class="avis-card__stars" role="img" aria-label="Noté ' + a.stars + ' sur 5">' + stars(a.stars) + '</div>' +
+      '<p class="avis-card__text">' + a.text + '</p>' +
+      '<div class="avis-card__foot"><span class="avis-avatar" aria-hidden="true">' + initials(a.author) + '</span><span class="avis-card__author">' + a.author + '</span><span>· ' + a.ago + '</span></div>' +
+    '</article>';
+  }
   document.getElementById("view-avis").innerHTML =
     '<div class="avis-wrap">' +
       '<div style="text-align:center">' +
@@ -67,14 +81,31 @@
         '<div class="avis-agg__meta">Note moyenne Google</div>' +
         '<div class="avis-agg__meta">Basé sur ' + r.count + ' avis vérifiés</div>' +
       '</div>' +
-      '<div class="avis-grid">' + r.items.map(function (a) {
-        return '<article class="avis-card">' +
-          '<div class="avis-card__stars" role="img" aria-label="Noté ' + a.stars + ' sur 5">' + stars(a.stars) + '</div>' +
-          '<p class="avis-card__text">' + a.text + '</p>' +
-          '<div class="avis-card__foot"><span class="avis-avatar" aria-hidden="true">' + initials(a.author) + '</span><span class="avis-card__author">' + a.author + '</span><span>· ' + a.ago + '</span></div>' +
-        '</article>';
-      }).join("") + '</div>' +
+      '<div class="avis-carousel">' +
+        '<button class="avis-nav" data-dir="-1" aria-label="Avis précédents">‹</button>' +
+        '<div class="avis-grid" id="avis-grid" aria-live="polite"></div>' +
+        '<button class="avis-nav" data-dir="1" aria-label="Avis suivants">›</button>' +
+      '</div>' +
+      '<div class="avis-dots" id="avis-dots"></div>' +
     '</div>';
+  (function () {
+    var grid = document.getElementById("avis-grid"), dotsW = document.getElementById("avis-dots"), list = r.items, start = 0, timer = null;
+    function pp() { return window.matchMedia("(max-width:767px)").matches ? 1 : (window.matchMedia("(max-width:1024px)").matches ? 2 : 3); }
+    function win() { var n = pp(), o = []; for (var k = 0; k < n; k++) o.push(list[(start + k) % list.length]); return o; }
+    function dots() { var h = ""; for (var d = 0; d < list.length; d++) h += '<button class="avis-dot' + (d === start ? " is-on" : "") + '" data-i="' + d + '" aria-label="Avis ' + (d + 1) + '"></button>'; dotsW.innerHTML = h; }
+    function paint(fade) { if (fade) { grid.style.opacity = "0"; setTimeout(function () { grid.innerHTML = win().map(avisCard).join(""); grid.style.opacity = "1"; dots(); }, 200); } else { grid.innerHTML = win().map(avisCard).join(""); dots(); } }
+    function go(dir) { start = (start + dir + list.length) % list.length; paint(true); }
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+    function auto() { stop(); if (reduce) return; timer = setInterval(function () { go(1); }, 5000); }
+    document.querySelectorAll(".avis-nav").forEach(function (b) { b.addEventListener("click", function () { go(+b.dataset.dir); auto(); }); });
+    dotsW.addEventListener("click", function (e) { var b = e.target.closest(".avis-dot"); if (b) { start = +b.dataset.i; paint(true); auto(); } });
+    var car = document.querySelector(".avis-carousel");
+    car.addEventListener("mouseenter", stop); car.addEventListener("mouseleave", auto);
+    car.addEventListener("focusin", stop); car.addEventListener("focusout", auto); /* a11y : pause au clavier (WCAG 2.2.2) */
+    window.addEventListener("resize", function () { paint(false); });
+    paint(false); auto();
+  })();
 
   /* ---- contact ---- */
   var mapsEmbed = "https://maps.google.com/maps?q=" + encodeURIComponent(i.mapsQuery) + "&t=&z=15&ie=UTF8&iwloc=&output=embed";
@@ -105,6 +136,7 @@
     views.forEach(function (v) { v.classList.toggle("is-active", v.id === "view-" + slug); });
     links.forEach(function (a) { if (a.getAttribute("data-view") === slug) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
     document.title = (slug === "home") ? "Colin Philippe — Bijouterie-Horlogerie · Chêne-Bourg" : (labelFor(slug) + " · Colin Philippe");
+    if (slug === "avis") { var sc = document.querySelector(".avis-agg__score"); if (sc) countUp(sc, parseFloat(r.rating.replace(",", ".")), window.matchMedia("(prefers-reduced-motion: reduce)").matches); }
     closeMenu();
   }
   window.addEventListener("hashchange", function () { showView(currentSlug()); });
@@ -118,6 +150,15 @@
   document.getElementById("menu-close").addEventListener("click", closeMenu);
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
   overlay.addEventListener("click", function (e) { if (e.target.closest && e.target.closest(".ov-link")) closeMenu(); });
+
+  /* ---- thème clair / sombre (toggle flottant, persistant) — V3 = SOMBRE par défaut ---- */
+  var SUN = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>';
+  var MOON = '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M20.5 13.2A8.2 8.2 0 1 1 10.8 3.5a6.4 6.4 0 0 0 9.7 9.7z"/></svg>';
+  var tbtn = document.getElementById("theme-toggle");
+  function setTheme(t) { document.documentElement.setAttribute("data-theme", t); if (tbtn) tbtn.innerHTML = (t === "dark") ? SUN : MOON; }
+  var saved; try { saved = localStorage.getItem("cp-theme"); } catch (e) {}
+  setTheme(saved || (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark"));
+  if (tbtn) tbtn.addEventListener("click", function () { var nt = (document.documentElement.getAttribute("data-theme") === "dark") ? "light" : "dark"; setTheme(nt); try { localStorage.setItem("cp-theme", nt); } catch (e) {} });
 
   showView(currentSlug());
 })();
