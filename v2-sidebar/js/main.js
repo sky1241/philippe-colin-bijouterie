@@ -65,23 +65,43 @@
 
   /* ---------- AVIS (exemples, honnêtement signalés) ---------- */
   var r = S.reviews;
+  function avisCard(a) {
+    return '<article class="avis-card">' +
+      (a.recent ? '<span class="avis-card__badge">Récent</span>' : '') +
+      '<div class="avis-card__stars" role="img" aria-label="Noté ' + a.stars + ' sur 5">' + stars(a.stars) + '</div>' +
+      '<p class="avis-card__text">' + a.text + '</p>' +
+      '<div class="avis-card__foot"><span class="avis-avatar" aria-hidden="true">' + initials(a.author) + '</span><span class="avis-card__author">' + a.author + '</span><span>· ' + a.ago + '</span></div>' +
+    '</article>';
+  }
   document.getElementById("view-avis").innerHTML =
     '<div class="view-head"><p class="eyebrow">Avis Google</p><h2>Ils nous font confiance</h2><div class="rule"></div></div>' +
     '<div class="avis-wrap">' +
       '<div class="avis-agg">' +
         '<div class="avis-agg__score">' + r.rating + '</div>' +
         '<div class="avis-agg__stars" role="img" aria-label="Note ' + r.rating + ' sur 5">★★★★★</div>' +
-        '<div class="avis-agg__meta">Note moyenne Google</div>' +
-        '<div class="avis-agg__meta">Basé sur ' + r.count + ' avis vérifiés</div>' +
+        '<div class="avis-agg__meta">Note moyenne Google · basé sur ' + r.count + ' avis</div>' +
       '</div>' +
-      '<div class="avis-grid">' + r.items.map(function (a) {
-        return '<article class="avis-card">' +
-          '<div class="avis-card__stars" role="img" aria-label="Noté ' + a.stars + ' sur 5">' + stars(a.stars) + '</div>' +
-          '<p class="avis-card__text">' + a.text + '</p>' +
-          '<div class="avis-card__foot"><span class="avis-avatar" aria-hidden="true">' + initials(a.author) + '</span><span class="avis-card__author">' + a.author + '</span><span>· ' + a.ago + '</span></div>' +
-        '</article>';
-      }).join("") + '</div>' +
+      '<div class="avis-carousel">' +
+        '<button class="avis-nav" data-dir="-1" aria-label="Avis précédents">‹</button>' +
+        '<div class="avis-grid" id="avis-grid" aria-live="polite"></div>' +
+        '<button class="avis-nav" data-dir="1" aria-label="Avis suivants">›</button>' +
+      '</div>' +
+      '<div class="avis-dots" id="avis-dots"></div>' +
     '</div>';
+  (function () {
+    var grid = document.getElementById("avis-grid"), dotsW = document.getElementById("avis-dots"), list = r.items, start = 0, timer = null;
+    function pp() { return window.matchMedia("(max-width:767px)").matches ? 1 : (window.matchMedia("(max-width:1024px)").matches ? 2 : 3); }
+    function win() { var n = pp(), o = []; for (var k = 0; k < n; k++) o.push(list[(start + k) % list.length]); return o; }
+    function dots() { var h = ""; for (var d = 0; d < list.length; d++) h += '<button class="avis-dot' + (d === start ? " is-on" : "") + '" data-i="' + d + '" aria-label="Avis ' + (d + 1) + '"></button>'; dotsW.innerHTML = h; }
+    function paint(fade) { if (fade) { grid.style.opacity = "0"; setTimeout(function () { grid.innerHTML = win().map(avisCard).join(""); grid.style.opacity = "1"; dots(); }, 200); } else { grid.innerHTML = win().map(avisCard).join(""); dots(); } }
+    function go(dir) { start = (start + dir + list.length) % list.length; paint(true); }
+    function auto() { if (timer) clearInterval(timer); timer = setInterval(function () { go(1); }, 5000); }
+    document.querySelectorAll(".avis-nav").forEach(function (b) { b.addEventListener("click", function () { go(+b.dataset.dir); auto(); }); });
+    dotsW.addEventListener("click", function (e) { var b = e.target.closest(".avis-dot"); if (b) { start = +b.dataset.i; paint(true); auto(); } });
+    var car = document.querySelector(".avis-carousel"); car.addEventListener("mouseenter", function () { if (timer) clearInterval(timer); }); car.addEventListener("mouseleave", auto);
+    window.addEventListener("resize", function () { paint(false); });
+    paint(false); auto();
+  })();
 
   /* ---------- CONTACT ---------- */
   var mapsEmbed = "https://maps.google.com/maps?q=" + encodeURIComponent(i.mapsQuery) + "&t=&z=15&ie=UTF8&iwloc=&output=embed";
@@ -129,6 +149,15 @@
   backdrop.addEventListener("click", closeMenu);
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
   nav.addEventListener("click", function (e) { if (e.target.closest && e.target.closest(".nav-link")) closeMenu(); });
+
+  /* ---- thème clair / sombre (toggle flottant, persistant) ---- */
+  var SUN = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.5 12h2.2M19.3 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>';
+  var MOON = '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M20.5 13.2A8.2 8.2 0 1 1 10.8 3.5a6.4 6.4 0 0 0 9.7 9.7z"/></svg>';
+  var tbtn = document.getElementById("theme-toggle");
+  function setTheme(t) { document.documentElement.setAttribute("data-theme", t); if (tbtn) tbtn.innerHTML = (t === "dark") ? SUN : MOON; }
+  var saved; try { saved = localStorage.getItem("cp-theme"); } catch (e) {}
+  setTheme(saved || "light"); // défaut = identité du site (clair) ; toggle + localStorage pour l'autre
+  if (tbtn) tbtn.addEventListener("click", function () { var nt = (document.documentElement.getAttribute("data-theme") === "dark") ? "light" : "dark"; setTheme(nt); try { localStorage.setItem("cp-theme", nt); } catch (e) {} });
 
   /* init */
   showView(currentSlug());

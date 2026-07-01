@@ -24,7 +24,7 @@
   --color-on-gold: var(--color-ink);
   --color-on-ink: #FFFFFF;
   --color-focus: var(--color-gold-strong);
-  --color-star: #C79A3C;            /* étoiles avis (or lisible sur clair) */
+  --color-star: #B7791F;            /* étoiles avis — or profond (≥3:1 sur ivoire, bible §CP) */
 
   /* typo */
   --font-display: "Playfair Display", "Iowan Old Style", Georgia, serif;
@@ -56,6 +56,20 @@
   --header-h: 64px;
   --z-sticky: 10; --z-backdrop: 40; --z-drawer: 50;
 }
+
+/* ===== THÈME SOMBRE (toggle) — palette bible-ux §CP dark, 22/22 AA ===== */
+:root[data-theme="dark"] {
+  --color-bg-page: #17140E; --color-surface-1: #211C14; --color-surface-2: #2B2418;
+  --color-ink: #F2EBDC; --color-ink-soft: #B7AC97; --color-border-subtle: #33291B; --color-border-strong: #857556;
+  --color-gold: #CBA155; --color-gold-hover: #D9B368; --color-gold-strong: #E4C074; --color-gold-soft: #33280F;
+  --color-on-gold: #1E1810; --color-on-ink: #1E1810; --color-focus: #E4C074; --color-star: #F2B84A;
+}
+[data-theme="dark"] .site-header { background: rgba(23,20,14,.9); }
+[data-theme="dark"] .product-card, [data-theme="dark"] .avis-card, [data-theme="dark"] .avis-nav { border: 1px solid rgba(255,255,255,.07); }
+
+/* bouton toggle thème (flottant, visible partout) */
+.theme-toggle { position: fixed; bottom: 20px; right: 20px; z-index: var(--z-sticky); width: 44px; height: 44px; border-radius: var(--radius-pill); border: 1px solid var(--color-border-strong); background: var(--color-surface-1); color: var(--color-ink); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; box-shadow: var(--shadow-sm); transition: color var(--dur-hover) var(--ease-out), border-color var(--dur-hover) var(--ease-out), background var(--dur-hover) var(--ease-out); }
+.theme-toggle:hover { color: var(--color-gold-strong); border-color: var(--color-gold); }
 
 /* ------------------------------ RESET / BASE ------------------------------ */
 *, *::before, *::after { box-sizing: border-box; }
@@ -218,6 +232,20 @@ h1, h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-hei
 .avis-card__foot { margin-top: auto; font-size: var(--fs-caption); color: var(--color-ink-soft); display: flex; align-items: center; gap: var(--space-2); }
 .avis-card__author { font-weight: var(--fw-semibold); color: var(--color-ink); }
 .avis-avatar { width: 32px; height: 32px; border-radius: var(--radius-pill); background: var(--color-gold-soft); color: var(--color-gold-strong); display: inline-flex; align-items: center; justify-content: center; font-weight: var(--fw-bold); font-size: .8rem; }
+
+/* ---- carousel avis (rotation, récents en tête) ---- */
+.avis-carousel { display: flex; align-items: stretch; gap: var(--space-3); width: 100%; max-width: 1120px; }
+.avis-carousel .avis-grid { flex: 1 1 auto; min-width: 0; max-width: none; transition: opacity .2s var(--ease-out); }
+.avis-carousel .avis-card { opacity: 1; transform: none; } /* le fondu est géré par le carousel, pas l'anim d'entrée */
+.avis-nav { flex: 0 0 auto; align-self: center; width: 42px; height: 42px; border-radius: var(--radius-pill); border: 1px solid var(--color-border-strong); background: var(--color-surface-1); color: var(--color-ink); font-size: 1.5rem; line-height: 1; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: background var(--dur-hover) var(--ease-out), color var(--dur-hover) var(--ease-out), border-color var(--dur-hover) var(--ease-out); }
+.avis-nav:hover { background: var(--color-gold); color: var(--color-on-gold); border-color: var(--color-gold); }
+.avis-dots { display: flex; gap: var(--space-2); justify-content: center; }
+.avis-dot { width: 8px; height: 8px; border-radius: var(--radius-pill); border: 0; background: var(--color-border-strong); opacity: .4; cursor: pointer; padding: 0; transition: opacity var(--dur-hover), background var(--dur-hover), width var(--dur-hover); }
+.avis-dot.is-on { opacity: 1; background: var(--color-gold); width: 22px; }
+.avis-card { position: relative; }
+.avis-card__badge { position: absolute; top: var(--space-3); right: var(--space-3); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; font-weight: var(--fw-bold); color: var(--color-on-gold); background: var(--color-gold); padding: 3px 7px; border-radius: var(--radius-pill); }
+.avis-card__text { display: -webkit-box; -webkit-line-clamp: 4; line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+@media (max-width: 767px) { .avis-carousel { max-width: 100%; } .avis-carousel .avis-card { flex: 1 1 100%; } .avis-nav { width: 38px; height: 38px; } }
 
 /* ------------------------------ VUE CONTACT ------------------------------ */
 .contact-grid { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1rem, 3vw, 2.5rem); align-items: stretch; }

@@ -74,11 +74,14 @@ window.SITE = {
     rating: "5,0",
     count: 11,
     placeholder: false,     // VRAIS avis Google (récupérés manuellement par Sky)
-    items: [
-      { author: "Nils Engelberts", stars: 5, text: "Horloger bijoutier très aimable, très chaleureux. Très professionnel. Joli intérieur du magasin. Je recommande à 100% 🤗", ago: "il y a 7 mois" },
+    items: [  // triés du plus récent au plus ancien (mise en avant des récents)
+      { author: "Nils Engelberts", stars: 5, text: "Horloger bijoutier très aimable, très chaleureux. Très professionnel. Joli intérieur du magasin. Je recommande à 100% 🤗", ago: "il y a 7 mois", recent: true },
+      { author: "Benjamin Huerta", stars: 5, text: "Accueillant, à l'écoute et très professionnel ! Une perle qui fait vivre l'art de la bijouterie avec finesse et passion. Je recommande vivement.", ago: "il y a 1 an", recent: true },
       { author: "Michèle Perroud", stars: 5, text: "Monsieur Colin est un magicien ! Il trouve toujours une solution pour satisfaire sa clientèle. Il aime son métier et ça se voit dans ses très belles créations. Je lui fais confiance à 200%.", ago: "il y a 2 ans" },
-      { author: "Benjamin Huerta", stars: 5, text: "Accueillant, à l'écoute et très professionnel ! Une perle qui fait vivre l'art de la bijouterie avec finesse et passion. Je recommande vivement.", ago: "il y a 1 an" },
-      { author: "William Weil", stars: 5, text: "Un véritable artiste bijoutier, création et travail d'exception. Rare de nos jours.", ago: "il y a 7 ans" }
+      { author: "hervé Stussi", stars: 5, text: "Très bien ! Bijoutier qui œuvre avec compétence et passion.", ago: "il y a 2 ans" },
+      { author: "Dario D'Orlando", stars: 5, text: "Tout simplement top ! Je recommande !", ago: "il y a 2 ans" },
+      { author: "William Weil", stars: 5, text: "Un véritable artiste bijoutier, création et travail d'exception. Rare de nos jours.", ago: "il y a 7 ans" },
+      { author: "Antoine Chevalier", stars: 5, text: "Jolie petite bijouterie habitée par un super créateur.", ago: "il y a 9 ans" }
     ]
   },
 
