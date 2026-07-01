@@ -37,7 +37,6 @@
       '<h1 class="hero__title">' + i.name + '</h1>' +
       '<p class="hero__baseline">' + i.baseline + '</p>' +
       '<ul class="hero__services">' + i.services.map(function (s) { return '<li>' + s.t + '</li>'; }).join("") + '</ul>' +
-      '<div class="hero__cats">' + S.categories.map(function (c) { return '<a class="btn btn--on-dark" href="#' + c.slug + '">' + c.label + '</a>'; }).join("") + '</div>' +
       '<div class="hero__cta"><a class="btn btn--gold" href="#contact">Prendre rendez-vous</a><a class="btn btn--on-dark" href="tel:' + i.phoneIntl + '">Appeler</a></div>' +
     '</div>';
 
