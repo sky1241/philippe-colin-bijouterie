@@ -44,10 +44,10 @@
 
   /* ---- catégories (asymétrique : 1 grande + 4) ---- */
   function piece(p, featured) {
-    return '<article class="piece' + (featured ? ' piece--featured' : '') + '">' +
+    return '<a class="piece' + (featured ? ' piece--featured' : '') + '" href="#' + p.cat + '/' + p.slug + '">' +
       '<div class="piece__media"><img src="' + p.img + '" alt="' + p.name + ' — ' + p.spec + '" loading="lazy" width="800" height="1000"></div>' +
       '<div class="piece__cap"><h3 class="piece__name">' + p.name + '</h3><p class="piece__spec">' + p.spec + '</p><p class="piece__price">' + p.price + '</p></div>' +
-    '</article>';
+    '</a>';
   }
   document.getElementById("category-views").innerHTML = S.categories.map(function (c, ci) {
     var rest = c.items.slice(1, 5);
@@ -140,20 +140,69 @@
       '<div class="contact-map"><iframe title="Carte — ' + i.address + '" src="' + mapsEmbed + '" loading="lazy"></iframe></div>' +
     '</div>';
 
-  /* ---- navigation de vues (no-scroll) ---- */
+  /* ---- navigation de vues (no-scroll) : 1 segment = vue · 2 segments = fiche produit ---- */
   var validSlugs = navItems.map(function (n) { return n.slug; });
-  function currentSlug() { var h = (location.hash || "").replace(/^#/, ""); return validSlugs.indexOf(h) >= 0 ? h : "home"; }
   function labelFor(slug) { for (var k = 0; k < navItems.length; k++) if (navItems[k].slug === slug) return navItems[k].label; return ""; }
   var views = Array.prototype.slice.call(document.querySelectorAll(".view"));
   var links = Array.prototype.slice.call(document.querySelectorAll(".ov-link"));
+  var productHost = document.getElementById("view-product");
+  function setActive(id) { views.forEach(function (v) { v.classList.toggle("is-active", v.id === id); }); }
+  function markNav(slug) { links.forEach(function (a) { if (a.getAttribute("data-view") === slug) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); }); }
   function showView(slug) {
-    views.forEach(function (v) { v.classList.toggle("is-active", v.id === "view-" + slug); });
-    links.forEach(function (a) { if (a.getAttribute("data-view") === slug) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
+    setActive("view-" + slug);
+    markNav(slug);
     document.title = (slug === "home") ? "Colin Philippe — Bijouterie-Horlogerie · Chêne-Bourg" : (labelFor(slug) + " · Colin Philippe");
     if (slug === "avis") { var sc = document.querySelector(".avis-agg__score"); if (sc) countUp(sc, parseFloat(r.rating.replace(",", ".")), window.matchMedia("(prefers-reduced-motion: reduce)").matches); }
     closeMenu();
   }
-  window.addEventListener("hashchange", function () { showView(currentSlug()); });
+  /* ---- fiche produit (vue dédiée : pièce en grand + 5 suggestions même type) ---- */
+  function relTile(p) {
+    return '<a class="rel" href="#' + p.cat + '/' + p.slug + '">' +
+      '<span class="rel__media"><img src="' + p.img + '" alt="' + p.name + '" loading="lazy" width="800" height="1000"></span>' +
+      '<span class="rel__cap"><span class="rel__name">' + p.name + '</span><span class="rel__price">' + p.price + '</span></span>' +
+    '</a>';
+  }
+  function renderProduct(p) {
+    productHost.innerHTML =
+      '<div class="product">' +
+        '<a class="product__back" href="#' + p.cat + '"><span class="product__back-ic" aria-hidden="true">&lsaquo;</span>' + p.catLabel + '</a>' +
+        '<div class="product__stage">' +
+          '<figure class="product__media"><img src="' + p.img + '" alt="' + p.name + ' — ' + p.spec + '" width="800" height="1000" fetchpriority="high"></figure>' +
+          '<div class="product__info">' +
+            '<p class="product__eyebrow">' + p.catTitle + '</p>' +
+            '<h1 class="product__name">' + p.name + '</h1>' +
+            '<p class="product__spec">' + p.spec + '</p>' +
+            '<p class="product__price">' + p.price + '</p>' +
+            '<div class="product__cta">' +
+              '<a class="btn btn--gold" href="#contact">Prendre rendez-vous</a>' +
+              '<a class="btn btn--outline" href="tel:' + i.phoneIntl + '">Appeler</a>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="product__related">' +
+          '<h2 class="product__related-title">Dans le même esprit</h2>' +
+          '<div class="product__related-row">' + S.related(p.cat, p.slug, 5).map(relTile).join("") + '</div>' +
+        '</div>' +
+      '</div>';
+  }
+  function showProduct(p) {
+    renderProduct(p);              /* rendu AVANT l'activation → l'anim d'entrée se rejoue */
+    setActive("view-product");
+    markNav(p.cat);                /* la catégorie du produit reste « courante » dans le menu */
+    document.title = p.name + " · " + p.catLabel + " · Colin Philippe";
+    closeMenu();                   /* ferme l'overlay si une nav produit survient menu ouvert */
+  }
+  function route() {
+    var parts = (location.hash || "").replace(/^#/, "").split("/").filter(Boolean);
+    if (parts.length >= 2) {
+      var prod = S.getProduct(parts[0], parts[1]);
+      if (prod) { showProduct(prod); return; }                                /* produit valide → fiche */
+      if (validSlugs.indexOf(parts[0]) >= 0) { showView(parts[0]); return; }  /* slug produit inconnu → sa catégorie */
+      showView("home"); return;
+    }
+    showView(validSlugs.indexOf(parts[0]) >= 0 ? parts[0] : "home");
+  }
+  window.addEventListener("hashchange", route);
 
   /* ---- menu plein écran ---- */
   var overlay = document.getElementById("overlay");
@@ -208,5 +257,5 @@
   setTheme(saved || "dark");   /* V3 = SOMBRE par défaut (brief) — on n'écoute pas prefers-color-scheme au 1er chargement */
   if (tbtn) tbtn.addEventListener("click", function () { var nt = (document.documentElement.getAttribute("data-theme") === "dark") ? "light" : "dark"; var el = document.documentElement; el.classList.add("theme-anim"); setTheme(nt); try { localStorage.setItem("cp-theme", nt); } catch (e) {} window.setTimeout(function () { el.classList.remove("theme-anim"); }, 500); });
 
-  showView(currentSlug());
+  route();
 })();

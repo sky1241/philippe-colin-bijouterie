@@ -74,13 +74,13 @@
   /* ---------- CATÉGORIES (5 produits/vue, no-scroll) ---------- */
   document.getElementById("category-views").innerHTML = S.categories.map(function (c) {
     var cards = c.items.map(function (p) {
-      return '<article class="product-card">' +
+      return '<a class="product-card" href="#' + c.slug + '/' + p.slug + '">' +
         '<div class="product-card__media"><img src="' + p.img + '" alt="' + p.name + ' — ' + p.spec + '" loading="lazy" width="800" height="1000"></div>' +
         '<div class="product-card__body">' +
           '<h2 class="product-card__name">' + p.name + '</h2>' +
           '<p class="product-card__spec">' + p.spec + '</p>' +
           '<p class="product-card__price">' + p.price + '</p>' +
-        '</div></article>';
+        '</div></a>';
     }).join("");
     return '<section class="view view--pad view--category" id="view-' + c.slug + '" aria-label="' + c.title + '">' +
       '<div class="view-head"><p class="eyebrow">Collection</p><h1>' + c.title + '</h1><p class="intro">' + c.intro + '</p><div class="rule"></div></div>' +
@@ -167,7 +167,54 @@
     if (slug === "avis") { var sc = document.querySelector(".avis-agg__score"); if (sc) countUp(sc, parseFloat(r.rating.replace(",", ".")), window.matchMedia("(prefers-reduced-motion: reduce)").matches); }
     closeMenu();
   }
-  window.addEventListener("hashchange", function () { showView(currentSlug()); });
+  /* ---------- VUE PRODUIT (fiche + « dans le même esprit », zéro scroll) ---------- */
+  var productEl = document.getElementById("view-product");
+  function showProduct(cat, slug) {
+    var p = S.getProduct(cat, slug);
+    if (!p) { showView(currentSlug()); return; }
+    var rel = S.related(cat, slug, 5).map(function (x) {
+      return '<a class="mini-card" href="#' + x.cat + '/' + x.slug + '">' +
+        '<span class="mini-card__media"><img src="' + x.img + '" alt="' + x.name + '" loading="lazy" width="800" height="1000"></span>' +
+        '<span class="mini-card__body"><span class="mini-card__name">' + x.name + '</span><span class="mini-card__price">' + x.price + '</span></span>' +
+      '</a>';
+    }).join("");
+    productEl.innerHTML =
+      '<a class="product-back" href="#' + p.cat + '"><span aria-hidden="true">‹</span>' + p.catLabel + '</a>' +
+      '<div class="product-detail">' +
+        '<figure class="product-detail__media"><img src="' + p.img + '" alt="' + p.name + ' — ' + p.spec + '" width="800" height="1000"></figure>' +
+        '<div class="product-detail__info">' +
+          '<p class="eyebrow">' + p.catTitle + '</p>' +
+          '<h1 class="product-detail__name">' + p.name + '</h1>' +
+          '<p class="product-detail__spec">' + p.spec + '</p>' +
+          '<p class="product-detail__price">' + p.price + '</p>' +
+          '<div class="product-detail__cta">' +
+            '<a class="btn btn--gold" href="#contact">Prendre rendez-vous</a>' +
+            '<a class="btn btn--ghost" href="tel:' + i.phoneIntl + '">Appeler</a>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<section class="product-related" aria-label="Suggestions du même type">' +
+        '<p class="product-related__label">Dans le même esprit</p>' +
+        '<div class="mini-row">' + rel + '</div>' +
+      '</section>';
+    productEl.setAttribute("aria-label", p.name + " — " + p.catTitle);
+    views.forEach(function (v) { v.classList.toggle("is-active", v.id === "view-product"); });
+    links.forEach(function (a) { if (a.getAttribute("data-view") === cat) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
+    document.title = p.name + " · Colin Philippe";
+    closeMenu();
+  }
+
+  /* ---------- ROUTEUR : #<cat> = catégorie · #<cat>/<slug> = fiche produit ---------- */
+  function route() {
+    var h = (location.hash || "").replace(/^#/, "");
+    var seg = h.split("/");
+    if (seg.length === 2 && seg[0] && seg[1]) {
+      if (S.getProduct(seg[0], seg[1])) { showProduct(seg[0], seg[1]); return; }
+      if (validSlugs.indexOf(seg[0]) >= 0) { showView(seg[0]); return; }
+    }
+    showView(currentSlug());
+  }
+  window.addEventListener("hashchange", route);
 
   /* ---------- MENU MOBILE (drawer) ---------- */
   var nav = document.getElementById("sidebar");
@@ -190,5 +237,5 @@
   if (tbtn) tbtn.addEventListener("click", function () { var nt = (document.documentElement.getAttribute("data-theme") === "dark") ? "light" : "dark"; var el = document.documentElement; el.classList.add("theme-anim"); setTheme(nt); try { localStorage.setItem("cp-theme", nt); } catch (e) {} window.setTimeout(function () { el.classList.remove("theme-anim"); }, 500); });
 
   /* init */
-  showView(currentSlug());
+  route();
 })();

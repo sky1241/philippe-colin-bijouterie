@@ -50,13 +50,13 @@
   /* ---------- CATÉGORIES (5 produits/vue, no-scroll) ---------- */
   document.getElementById("category-views").innerHTML = S.categories.map(function (c) {
     var cards = c.items.map(function (p) {
-      return '<article class="product-card">' +
+      return '<a class="product-card" href="#' + c.slug + '/' + p.slug + '" aria-label="' + p.name + ' — ' + p.spec + '">' +
         '<div class="product-card__media"><img src="' + p.img + '" alt="' + p.name + ' — ' + p.spec + '" loading="lazy" width="800" height="1000"></div>' +
         '<div class="product-card__body">' +
           '<h2 class="product-card__name">' + p.name + '</h2>' +
           '<p class="product-card__spec">' + p.spec + '</p>' +
           '<p class="product-card__price">' + p.price + '</p>' +
-        '</div></article>';
+        '</div></a>';
     }).join("");
     return '<section class="view view--pad view--category" id="view-' + c.slug + '" aria-label="' + c.title + '">' +
       '<div class="view-head"><p class="eyebrow">Collection</p><h1>' + c.title + '</h1><p class="intro">' + c.intro + '</p><div class="rule"></div></div>' +
@@ -158,7 +158,56 @@
     if (slug === "avis") { var sc = document.querySelector(".avis-agg__score"); if (sc) countUp(sc, parseFloat(r.rating.replace(",", ".")), window.matchMedia("(prefers-reduced-motion: reduce)").matches); }
     closeMenu();
   }
-  window.addEventListener("hashchange", function () { showView(currentSlug()); });
+
+  /* ---------- VUE PRODUIT (#<cat>/<slug>, zéro scroll) ---------- */
+  var productView = document.getElementById("view-product");
+  function relCard(s) {
+    return '<a class="rel-card" href="#' + s.cat + '/' + s.slug + '">' +
+      '<div class="rel-card__media"><img src="' + s.img + '" alt="' + s.name + '" loading="lazy" width="400" height="500"></div>' +
+      '<div class="rel-card__body"><span class="rel-card__name">' + s.name + '</span><span class="rel-card__price">' + s.price + '</span></div>' +
+    '</a>';
+  }
+  function renderProduct(p) {
+    var rel = S.related(p.cat, p.slug, 5).map(relCard).join("");
+    productView.innerHTML =
+      '<a class="prod-back" href="#' + p.cat + '" aria-label="Retour · ' + p.catLabel + '"><span aria-hidden="true">‹</span> ' + p.catLabel + '</a>' +
+      '<div class="prod-main">' +
+        '<div class="prod-media"><img src="' + p.img + '" alt="' + p.name + ' — ' + p.spec + '" width="800" height="1000"></div>' +
+        '<div class="prod-info">' +
+          '<p class="eyebrow">' + p.catTitle + '</p>' +
+          '<h1 class="prod-name">' + p.name + '</h1>' +
+          '<p class="prod-spec">' + p.spec + '</p>' +
+          '<p class="prod-price">' + p.price + '</p>' +
+          '<div class="prod-cta"><a class="btn btn--gold" href="#contact">Prendre rendez-vous</a><a class="btn btn--ghost" href="tel:' + i.phoneIntl + '">Appeler</a></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="prod-related">' +
+        '<p class="prod-related__title eyebrow">Dans le même esprit</p>' +
+        '<div class="rel-row">' + rel + '</div>' +
+      '</div>';
+  }
+  function showProduct(p) {
+    var wasActive = productView.classList.contains("is-active");
+    renderProduct(p);
+    views.forEach(function (v) { v.classList.toggle("is-active", v === productView); });
+    links.forEach(function (a) { if (a.getAttribute("data-view") === p.cat) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
+    document.title = p.name + " · " + p.catLabel + " · Colin Philippe";
+    closeMenu();
+    if (wasActive) { productView.classList.remove("is-active"); void productView.offsetWidth; productView.classList.add("is-active"); } /* produit → produit : rejoue l'anim d'entrée */
+  }
+
+  /* ---------- ROUTEUR (1 segment = vue · 2 segments = produit) ---------- */
+  function route() {
+    var h = (location.hash || "").replace(/^#/, "");
+    var seg = h.split("/");
+    if (seg.length === 2 && seg[0] && seg[1]) {
+      var p = S.getProduct(seg[0], seg[1]);
+      if (p) { showProduct(p); return; }
+      showView(validSlugs.indexOf(seg[0]) >= 0 ? seg[0] : "home"); return; /* slug produit inconnu → catégorie (ou accueil) */
+    }
+    showView(currentSlug());
+  }
+  window.addEventListener("hashchange", route);
 
   /* ---------- MENU MOBILE (drawer) ---------- */
   var nav = document.getElementById("site-nav");
@@ -181,5 +230,5 @@
   if (tbtn) tbtn.addEventListener("click", function () { var nt = (document.documentElement.getAttribute("data-theme") === "dark") ? "light" : "dark"; var el = document.documentElement; el.classList.add("theme-anim"); setTheme(nt); try { localStorage.setItem("cp-theme", nt); } catch (e) {} window.setTimeout(function () { el.classList.remove("theme-anim"); }, 500); });
 
   /* init */
-  showView(currentSlug());
+  route();
 })();
