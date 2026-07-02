@@ -511,3 +511,15 @@ h1,h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-heig
   html.theme-anim, html.theme-anim *, html.theme-anim *::before, html.theme-anim *::after { transition-duration: .01ms !important; }
   .piece:hover .piece__media img { transform: none; }
 }
+
+/* Point 3 — suggestions produit : rangée qui défile horizontalement, nom + prix visibles */
+@media (max-width: 767px) {
+  .product__related-row { display: flex; grid-template-columns: none; flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; gap: var(--space-2); padding-bottom: 4px; scrollbar-width: none; }
+  .product__related-row::-webkit-scrollbar { display: none; }
+  .rel { flex: 0 0 46%; scroll-snap-align: start; }
+  .rel__media { height: auto; aspect-ratio: 4 / 3; }
+  .rel__cap { display: flex; padding: 6px 8px 8px; }
+  .rel__name { font-size: .82rem; }
+  .rel__price { font-size: 11px; }
+  .product__related-title { display: block; }
+}

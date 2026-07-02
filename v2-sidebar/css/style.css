@@ -612,3 +612,20 @@ a.avis-agg__meta:hover { color: var(--color-gold-strong); text-decoration-color:
   .product-card:hover { transform: none; }
   .product-card:hover .product-card__media img { transform: none; }
 }
+
+/* CTA atelier (ajouté pour cohérence avec V1) */
+.atelier-cta { margin-top: var(--space-2); }
+@media (max-width: 767px) { .atelier-cta { align-self: center; } }
+
+/* Point 3 — suggestions produit : rangée qui défile horizontalement, nom + prix visibles */
+@media (max-width: 767px) {
+  .mini-row { flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; gap: var(--space-2); padding-bottom: 4px; scrollbar-width: none; }
+  .mini-row::-webkit-scrollbar { display: none; }
+  .mini-card { flex: 0 0 46%; scroll-snap-align: start; }
+  .mini-card__media { height: auto; aspect-ratio: 4 / 3; }
+  .mini-card__body { display: flex; padding: 6px 8px 8px; }
+  .mini-card__name { display: block; font-size: .82rem; }
+  .mini-card__price { font-size: 11px; }
+  .product-related__label { display: block; }
+  .product-related { margin-top: var(--space-3); }
+}

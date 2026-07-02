@@ -272,9 +272,9 @@
   var MOON = '<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M20.5 13.2A8.2 8.2 0 1 1 10.8 3.5a6.4 6.4 0 0 0 9.7 9.7z"/></svg>';
   var tbtn = document.getElementById("theme-toggle");
   function setTheme(t) { document.documentElement.setAttribute("data-theme", t); if (tbtn) { tbtn.innerHTML = (t === "dark") ? SUN : MOON; tbtn.setAttribute("aria-pressed", t === "dark" ? "true" : "false"); } }
-  var saved; try { saved = localStorage.getItem("cp-theme"); } catch (e) {}
+  var saved; try { saved = localStorage.getItem("cp-theme-v3"); } catch (e) {}
   setTheme(saved || "dark");   /* V3 = SOMBRE par défaut (brief) — on n'écoute pas prefers-color-scheme au 1er chargement */
-  if (tbtn) tbtn.addEventListener("click", function () { var nt = (document.documentElement.getAttribute("data-theme") === "dark") ? "light" : "dark"; var el = document.documentElement; el.classList.add("theme-anim"); setTheme(nt); try { localStorage.setItem("cp-theme", nt); } catch (e) {} window.setTimeout(function () { el.classList.remove("theme-anim"); }, 500); });
+  if (tbtn) tbtn.addEventListener("click", function () { var nt = (document.documentElement.getAttribute("data-theme") === "dark") ? "light" : "dark"; var el = document.documentElement; el.classList.add("theme-anim"); setTheme(nt); try { localStorage.setItem("cp-theme-v3", nt); } catch (e) {} window.setTimeout(function () { el.classList.remove("theme-anim"); }, 500); });
 
   route();
 })();
