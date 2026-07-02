@@ -533,4 +533,5 @@ h1,h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-heig
   .cat-grid .piece__media { height: clamp(92px, 27vw, 122px); }
   .piece--featured .piece__media { height: clamp(150px, 42vw, 215px); }
   .piece__cap { min-height: 0; height: auto; }
+  .cat-grid .piece__name { -webkit-line-clamp: 2; line-clamp: 2; height: auto; }   /* noms complets sur 2 lignes (place dispo maintenant) */
 }
