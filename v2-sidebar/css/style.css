@@ -635,3 +635,8 @@ a.avis-agg__meta:hover { color: var(--color-gold-strong); text-decoration-color:
   .product-detail__media { height: auto; aspect-ratio: 4 / 5; max-height: 52vh; }
   .product-detail__media img { object-position: center; }
 }
+
+/* Vignette carte catégorie (liste) au format 4:5 des photos → pièce entière, zéro coupe (art-direction WEB.md) */
+@media (max-width: 767px) {
+  .product-card__media { flex-basis: 32%; aspect-ratio: 1 / 1; height: auto; align-self: stretch; }
+}

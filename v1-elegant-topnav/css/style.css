@@ -623,3 +623,8 @@ h1, h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-hei
 @media (max-width: 767px) {
   .prod-media { height: auto; aspect-ratio: 4 / 5; max-height: 52vh; }
 }
+
+/* Vignette carte catégorie (liste) au format 4:5 des photos → pièce entière, zéro coupe (art-direction WEB.md) */
+@media (max-width: 767px) {
+  .product-card__media { flex-basis: 32%; aspect-ratio: 1 / 1; height: auto; align-self: stretch; }
+}

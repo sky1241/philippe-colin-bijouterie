@@ -542,3 +542,9 @@ h1,h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-heig
   .product { flex: 0 0 auto; }
   .product__stage { flex: 0 0 auto; }
 }
+
+/* Vignettes catégorie au format 4:5 des photos (art-direction portrait mobile — WEB.md « Responsive images » ; §65 cohérence ; §132 montrer le produit) → pièces entières, zéro coupe */
+@media (max-width: 767px) {
+  .cat-grid .piece__media { height: auto; aspect-ratio: 1 / 1; }
+  .piece--featured .piece__media { height: auto; aspect-ratio: 1 / 1; }
+}
