@@ -416,9 +416,11 @@ h1, h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-hei
   /* Atelier : empilé — photo compacte au-dessus, texte dessous (no-scroll) */
   .atelier-grid { flex-direction: column; align-items: stretch; justify-content: center; gap: clamp(.75rem, 2vh, 1.25rem); }
   .atelier-media { flex: 0 0 auto; align-self: stretch; height: clamp(120px, 20vh, 190px); }
-  .atelier-body { flex: 0 0 auto; justify-content: flex-start; gap: var(--space-3); }
-  .atelier-lead { font-size: var(--fs-small); max-width: none; }
-  .atelier-points { gap: var(--space-1) var(--space-4); max-width: none; }
+  .atelier-body { flex: 0 0 auto; justify-content: flex-start; align-items: center; text-align: center; gap: var(--space-3); }
+  .atelier-body .view-head { text-align: center; }
+  .atelier-body .view-head .rule { margin-left: auto; margin-right: auto; }
+  .atelier-lead { font-size: var(--fs-small); max-width: 42ch; margin-left: auto; margin-right: auto; }
+  .atelier-points { justify-content: center; grid-template-columns: auto auto; column-gap: var(--space-8); gap: var(--space-1) var(--space-8); max-width: none; }
 }
 
 /* Produit sur mobile : pile déterministe (rien ne grandit/centre → aucun clip), image en haut,

@@ -327,10 +327,11 @@ h1,h2 { font-family: var(--font-display); font-weight: var(--fw-bold); line-heig
   .view--atelier { justify-content: flex-start; }
   .atelier-grid { grid-template-columns: 1fr; align-content: start; gap: clamp(.7rem, 2vh, 1.15rem); }
   .atelier-media { height: clamp(110px, 18vh, 160px); max-height: none; }
-  .atelier-body { max-width: none; gap: clamp(.4rem, 1.2vh, .8rem); }
+  .atelier-body { max-width: none; align-items: center; text-align: center; gap: clamp(.4rem, 1.2vh, .8rem); }
+  .atelier-kicker { justify-content: center; }
   .atelier-title { font-size: 1.85rem; }
-  .atelier-text { font-size: .92rem; }
-  .atelier-points { padding-top: var(--space-2); gap: var(--space-1) var(--space-4); }
+  .atelier-text { font-size: .92rem; max-width: 42ch; margin-left: auto; margin-right: auto; }
+  .atelier-points { justify-content: center; grid-template-columns: auto auto; column-gap: var(--space-8); padding-top: var(--space-2); gap: var(--space-1) var(--space-8); }
   /* fiche produit mobile : image flexible (~30vh, cède avant les infos), infos compactes, 5 vignettes en bas — tout dans 100dvh */
   .product { gap: clamp(.45rem, 1.5vh, .85rem); }
   .product__stage { display: flex; flex-direction: column; gap: clamp(.5rem, 1.6vh, .9rem); }
